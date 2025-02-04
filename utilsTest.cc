@@ -42,7 +42,6 @@ vectorPrint(w,rows);
 vectorNorm(u,rows);
 
 vectorDotProduct(u,v,rows,w);
-vectorPrint(w,rows);
 
 vectorScaling();
 
