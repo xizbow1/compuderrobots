@@ -14,7 +14,7 @@ void vectorNorm(float* u, int rows);
 
 void vectorDotProduct(float* u,float* v, int rows, float* w);
 
-void vectorScaling();
+void vectorScaling(float* v, int rows, float alpha, float* w);
 
 
 #endif

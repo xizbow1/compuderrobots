@@ -38,7 +38,7 @@ void vectorNorm(float* u, int rows){
   for(int i=0; i<rows; i++){
     sum += u[i]*u[i];
   }
-  printf("%7.1f\n", sqrt(sum));
+  printf("%7.2f\n", sqrt(sum));
   printf("\n");
 }
 
@@ -49,8 +49,12 @@ void vectorDotProduct(float* u,float* v, int rows, float* w){
     product += u[i]*v[i];
   } 
   printf("%7.1f\n", product);
+  printf("\n");
 }
 
-void vectorScaling(){
+void vectorScaling(float* v, int rows, float alpha, float* w){
   printf("vectorScaling\n");
+  for(int i=0; i<rows; i++){
+    w[i] = alpha*v[i];
+  }
 }
