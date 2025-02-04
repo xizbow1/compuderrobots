@@ -25,14 +25,25 @@ float v[] = {
              6 
            };
 
-
+float w[3];
 
 int rows = 3;
+
 float alpha = 2.0;
 
 vectorPrint(u, rows);
 
-vectorScale(u,rows,alpha,v);
-vectorPrint(v,rows);
+vectorScale(u,rows,alpha,w);
+vectorPrint(w,rows);
+
+vectorSubract(u,v,rows,w);
+vectorPrint(w,rows);
+
+vectorNorm(u,rows);
+
+vectorDotProduct(u,v,rows,w);
+vectorPrint(w,rows);
+
+vectorScaling();
 
 }
