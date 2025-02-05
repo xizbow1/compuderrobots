@@ -16,6 +16,8 @@ void vectorDotProduct(float* u,float* v, int rows, float* w);
 
 void vectorScaling(float* v, int rows, float alpha, float* w);
 
+void matrixMultiply(float* a, int rows_a, int cols_a, float* b, int rows_b,int cols_b, float* c);
+
 
 #endif
 

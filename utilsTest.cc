@@ -27,6 +27,27 @@ float v[] = {
 
 float w[3];
 
+float a [] = {
+              2,1,
+              1,2
+            };
+int rows_a = 2;
+int cols_a = 2;
+
+float b[] = {
+             1,2,3,4,
+             5,6,7,8
+           };
+int rows_b = 2;
+int cols_b = 4;
+
+float c[] = {
+              0,0,0,0,
+              0,0,0,0
+            };
+int rows_c = 2;
+int cols_c = 4;
+
 int rows = 3;
 
 float alpha = 2.0;
@@ -69,5 +90,7 @@ w = {4*2, 5*2, 6*2} = {8, 10, 12}
 */
 vectorScaling(v,rows,alpha,w);
 vectorPrint(w,rows);
+
+matrixMultiply(a,rows_a,cols_a,b,rows_b,cols_b,c);
 
 }

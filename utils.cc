@@ -58,3 +58,14 @@ void vectorScaling(float* v, int rows, float alpha, float* w){
     w[i] = alpha*v[i];
   }
 }
+
+void matrixMultiply(float* a, int rows_a,int col_a, float* b, int rows_b, int col_b, float* c){
+  printf("matrixMultiply\n");
+  for(int i=0; i<rows_a; i++){
+    for(int j=0; j<col_b; j++){
+      c[j] = a[i]*b[j] + a[i+rows_a]*b[j+col_b];
+      printf("%7.1f\n", c[j]);
+    }
+  }
+
+}
