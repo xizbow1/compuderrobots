@@ -61,6 +61,11 @@ void vectorScaling(float* v, int rows, float alpha, float* w){
 
 void matrixMultiply(float* a, int rows_a,int col_a, float* b, int rows_b, int col_b, float* c){
   printf("matrixMultiply\n");
+  if(col_a != rows_b){
+    printf("Error: Matrix dimensions do not match\n");
+    return;
+  }
+  
   for(int i=0; i<rows_a; i++){
     for(int j=0; j<col_b; j++){
       c[j] = a[i]*b[j] + a[i+rows_a]*b[j+col_b];
