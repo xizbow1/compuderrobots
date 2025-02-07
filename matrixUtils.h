@@ -8,5 +8,6 @@ void matrixPrint(float* matrix, int rows, int cols);
 
 void matrixProduct(float* a, int rows_a, int cols_a, float* b, int rows_b, int cols_b, float* c); 
 
+void matrixTranspose(float* a, int rows, int cols, float* b);
 #endif
 

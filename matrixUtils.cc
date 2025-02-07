@@ -11,7 +11,7 @@
 using namespace std;
 
 void matrixPrint(float* matrix, int rows, int cols) {
-    printf("number of rows and cols,%d %d \n", rows, cols);
+    printf("number of rows and cols, %d %d \n", rows, cols);
     for (int row = 0; row < rows; row++) {
         for (int col = 0; col < cols; col++) {
             printf("%7.4f ",matrix[row*cols + col]);
@@ -43,6 +43,20 @@ void matrixProduct(float* a, int rows_a, int cols_a, float* b, int rows_b, int c
 	 exit(0);
  }
 
+}
+
+void matrixTranspose(float* a, int rows, int cols, float* aT){
+  //iterate through the row
+  for(int row = 0; row < rows; row++){
+    //iterate through the column
+    for(int col = 0; col < cols; col++){
+
+        aT[col*rows+row] = a[row*cols+col];
+
+    }
+
+  }
+  matrixPrint(aT, cols, rows);
 }
 
 
