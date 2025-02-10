@@ -9,6 +9,7 @@
 #include <sstream>
 #include "readParams.h"
 #include "readData.h"
+#include "matrixUtils.h"
 
 using namespace std;
 
@@ -40,6 +41,10 @@ float   z[rows];
 float  zc[rows];
 
 readData(inputFile, u, v, x ,y, z, zc);
+
+float uT[rows * cols];
+
+matrixTranspose(u, rows, cols, uT);
 
 return 0;
 
