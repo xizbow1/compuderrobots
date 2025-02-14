@@ -73,37 +73,54 @@ void matrixTranspose(float* a, int rows, int cols, float* aTranspose){
  }
 }
 
-void matrixQR(float* a,int rows, int cols, float* q, float* r){
-  //Initalize temp array u
-  float* u = new float[rows];
+void matrixQR(float* a, int rows, int cols, float* q, float* r) {
+    // Initialize temp array u
+    float* u = new float[rows];
 
-  //populate u to create vector from martix a
-  for(int i = 0; i < cols; i++){
-     for(int j = 0; j < rows; j++){
-      u[j]= a[j * cols + i];
+    // Initialize Q and R to zero
+    for (int i = 0; i < rows * cols; i++) {
+        q[i] = 0.0;
+        r[i] = 0.0;
     }
 
-    //Find the dot product of u and
-    for(int j = 0; j < i; j++){
-      float dotP = q[j * cols + j] * u[j];
-      //store dotproduct in correct position of r
-      r[j * cols + i] = dotP;
-      //iterate through and subract the dotproduct from u[k]
-      for(int k = 0; k < rows; k++){
-        u[k] -= dotP * q[k * cols + j];
-      }
+    // Gram-Schmidt process
+    for (int i = 0; i < cols; i++) {
+        // Copy column i of A to u
+        for (int j = 0; j < rows; j++) {
+            u[j] = a[j * cols + i];
+        }
 
-      //find the norm of u
-      float norm = vectorNorm(u, rows);  
+        // Orthogonalize u against previous columns of Q
+        for (int j = 0; j < i; j++) {
+            float dotP = 0.0;
+            for (int k = 0; k < rows; k++) {
+                dotP += q[k * cols + j] * u[k];
+            }
+            r[j * cols + i] = dotP;
+            for (int k = 0; k < rows; k++) {
+                u[k] -= dotP * q[k * cols + j];
+            }
+        }
 
-      //iterate through and divide u by the norm and store in q
-      for(int j = 0; j < rows; j++){
-      q[j * cols + i] = u[j] / norm;
-      }
+        // Compute the norm of u
+        float norm = 0.0;
+        for (int j = 0; j < rows; j++) {
+            norm += u[j] * u[j];
+        }
+        norm = sqrt(norm);
 
-    }       
-  }
+        // Normalize u and store in Q
+        r[i * cols + i] = norm;
+        for (int j = 0; j < rows; j++) {
+            if(norm == 0){
+            q[j * cols + i] = 0;
+            }else{
+            q[j * cols + i] = u[j] / norm;
+            }
+        }
+    }
 
+    delete[] u;
 }
 
 
