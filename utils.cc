@@ -38,10 +38,10 @@ float vectorNorm(float* u, int rows){
   return sqrt(sum);
 }
 
-float vectorDotProduct(float* u,float* v, int rows){
-  float product = 0;
+float* vectorDotProduct(float* u,float* v, int rows){
+  float* product = 0;
   for(int i=0; i<rows; i++){
-    product += u[i]*v[i];
+    product[i] = u[i]*v[i];
   } 
   return product;
 }

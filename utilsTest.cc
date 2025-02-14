@@ -62,7 +62,7 @@ Passing u,v,rows and w as arguments
 u = {1,2,3}, v = {4,5,6}
 w = {1-4, 2-5, 3-6} = {-3, -3, -3}
 */
-vectorSubract(u,v,rows,w);
+vectorSubtract(u,v,rows,w);
 vectorPrint(w,rows);
 
 /*
@@ -72,7 +72,8 @@ u = {1,2,3}
 sum = 1^2 + 2^2 + 3^2 = 14
 sqrt(14) = 3.74
 */
-vectorNorm(u,rows);
+printf("%f",vectorNorm(u,rows));
+
 
 /*
 Testing vectorDotProduct
@@ -80,7 +81,7 @@ Passing u,v,rows and w as arguments
 u = {1,2,3}, v = {4,5,6}
 product = 1*4 + 2*5 + 3*6 = 32
 */
-vectorDotProduct(u,v,rows,w);
+vectorDotProduct(u,v,rows);
 
 /*
 Testing vectorScaling

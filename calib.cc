@@ -60,11 +60,11 @@ const int cols = 12;
 
 float   m[rows*cols]={0.0};
 float   mTranspose[cols*rows];
-float   a[cols*cols];
+float   a[cols*cols]={0.0};
 float   c[rows];
 float   b[cols];
 float   d[cols];
-float   q[cols*cols]={0.0};
+float   q[cols*cols] ={0.0};
 float   qT[cols*cols]={0.0};
 float   r[cols*cols]={0.0};
 float   p[cols] = {0.0};

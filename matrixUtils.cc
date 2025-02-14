@@ -79,24 +79,22 @@ void matrixQR(float* a,int rows, int cols, float* q, float* r){
 
   //populate u to create vector from martix a
   for(int i = 0; i < cols; i++){
-    for(int j = 0; j < rows; j++){
-      u[j]= a[j*cols+i];
+     for(int j = 0; j < rows; j++){
+      u[j]= a[j * cols + i];
     }
 
-    //Find the dot product of u andd.
+    //Find the dot product of u and
     for(int j = 0; j < i; j++){
-      float dotP = vectorDotProduct(&q[j * cols + j],u,rows);
+      float dotP = q[j * cols + j] * u[j];
       //store dotproduct in correct position of r
       r[j * cols + i] = dotP;
       //iterate through and subract the dotproduct from u[k]
       for(int k = 0; k < rows; k++){
-        u[k]-=dotP * q[k * cols + j];
+        u[k] -= dotP * q[k * cols + j];
       }
 
       //find the norm of u
       float norm = vectorNorm(u, rows);  
-      //store norm in r    
-      r[i * cols + i] = norm;
 
       //iterate through and divide u by the norm and store in q
       for(int j = 0; j < rows; j++){
@@ -105,7 +103,7 @@ void matrixQR(float* a,int rows, int cols, float* q, float* r){
 
     }       
   }
-  delete[] u;
+
 }
 
 
