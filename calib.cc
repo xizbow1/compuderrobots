@@ -64,10 +64,10 @@ float   a[cols*cols];
 float   c[rows];
 float   b[cols];
 float   d[cols];
-float   q[cols*cols];
-float   qT[cols*cols];
-float   r[cols*cols];
-float   p[cols];
+float   q[cols*cols]={0.0};
+float   qT[cols*cols]={0.0};
+float   r[cols*cols]={0.0};
+float   p[cols] = {0.0};
 float   k[9] = {0.0};
 float   test[cols*cols];
 
