@@ -8,11 +8,11 @@ void vectorPrint(float* u , int rows);
 
 void vectorScale(float* u, int rows, float alpha , float* w); 
 
-void vectorSubract(float* u, float* v, int rows, float* w);
+void vectorSubtract(float* u, float* v, int rows, float* w);
 
-void vectorNorm(float* u, int rows);
+float vectorNorm(float* u, int rows);
 
-void vectorDotProduct(float* u,float* v, int rows, float* w);
+float vectorDotProduct(float* u,float* v, int rows);
 
 void vectorScaling(float* v, int rows, float alpha, float* w);
 
