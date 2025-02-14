@@ -5,7 +5,7 @@ CC = g++
 CFLAGS = -Wall 
 
 # Source files
-SRCS = calib.cc readData.cc readParams.cc matrixUtils.cc
+SRCS = calib.cc readData.cc readParams.cc utils.cc matrixUtils.cc
 
 # Object files (replace .cc with .o)
 OBJS = $(SRCS:.cc=.o)

@@ -19,48 +19,40 @@ void vectorPrint(float* u , int rows){
 }
 
 void vectorScale(float* u, int rows, float alpha , float* w){
-  printf("vectorScale\n");
   for(int i=0; i<rows; i++){
-    w[i]=alpha*u[i];
+    u[i]=alpha*u[i];
   }
 }
 
-void vectorSubract(float* u, float* v, int rows, float* w){
-  printf("vectorSubract\n");
+void vectorSubtract(float* u, float* v, int rows, float* w){
   for(int i=0; i<rows; i++){
     w[i]=u[i]-v[i];
   }
 }
 
-void vectorNorm(float* u, int rows){
-  printf("vectorNorm\n");
+float vectorNorm(float* u, int rows){
   float sum = 0;
   for(int i=0; i<rows; i++){
     sum += u[i]*u[i];
   }
-  printf("%7.2f\n", sqrt(sum));
-  printf("\n");
+  return sqrt(sum);
 }
 
-void vectorDotProduct(float* u,float* v, int rows, float* w){
-  printf("vectorDotProduct\n");
+float vectorDotProduct(float* u,float* v, int rows){
   float product = 0;
   for(int i=0; i<rows; i++){
     product += u[i]*v[i];
   } 
-  printf("%7.1f\n", product);
-  printf("\n");
+  return product;
 }
 
 void vectorScaling(float* v, int rows, float alpha, float* w){
-  printf("vectorScaling\n");
   for(int i=0; i<rows; i++){
     w[i] = alpha*v[i];
   }
 }
 
 void matrixMultiply(float* a, int rows_a, int col_a, float* b, int rows_b, int col_b, float* c){
-  printf("matrixMultiply\n");
   if(col_a != rows_b){
     printf("Error: Matrix dimensions do not match\n");
     return;
