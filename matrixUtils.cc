@@ -134,83 +134,83 @@ void matrixExtractCol(float*a, int rows, int cols, int col, float* column){
 
 
 void matrixBackSubstitution(float* R, int rows, int cols, float* d, float* p){
-//solve Rp=d for an uppertriangular matrix R
-// using back substitution
+    //solve Rp=d for an uppertriangular matrix R
+    // using back substitution
 
-  for (int j = cols-1; j > -1; j--){
+    for (int j = cols-1; j > -1; j--){
         p[j]=d[j];
-	for(int k = j+1; k < cols; k++){
-		p[j]= p[j] - R[j*cols + k]*p[k];
-	}
-	p[j]=p[j]/R[j*cols+j];
-  }
+    for(int k = j+1; k < cols; k++){
+        p[j]= p[j] - R[j*cols + k]*p[k];
+    }
+    p[j]=p[j]/R[j*cols+j];
+    }
 
 }
 
 void matrixUpperTriangularInverse(float* A, int rows, int cols, float* invA){
 // This code computes the inverse of a non-singular upper triangular 3x3 matrix.
-if(rows !=3 || cols !=3){
-	printf(" Only 3x3 full rank upper triangle matricies can be inverted with this code\n");
-       	exit(0);
-}
+    if(rows !=3 || cols !=3){
+        printf(" Only 3x3 full rank upper triangle matricies can be inverted with this code\n");
+            exit(0);
+    }
 
- for(int row = 0; row < rows; row++){
-  for(int col= 0;col < cols; col++){
-    invA[ row*cols + col]  = 0.0;
-  }
- }
+    for(int row = 0; row < rows; row++){
+    for(int col= 0;col < cols; col++){
+        invA[ row*cols + col]  = 0.0;
+    }
+    }
 
-invA[0*cols+0]=1.0/A[0*cols+0];
-invA[1*cols+1]=1.0/A[1*cols+1];
-invA[2*cols+2]=1.0/A[2*cols+2];
+    invA[0*cols+0]=1.0/A[0*cols+0];
+    invA[1*cols+1]=1.0/A[1*cols+1];
+    invA[2*cols+2]=1.0/A[2*cols+2];
 
-invA[0*cols+1]=-A[0*cols+1]*invA[1*cols+1]/A[0*cols+0];
-invA[1*cols+2]=-A[1*cols+2]*invA[2*cols+2]/A[1*cols+1];
-invA[0*cols+2]=-( A[0*cols+1]*invA[1*cols+2] + A[0*cols+2]*invA[2*cols+2] )/A[0*cols+0];
+    invA[0*cols+1]=-A[0*cols+1]*invA[1*cols+1]/A[0*cols+0];
+    invA[1*cols+2]=-A[1*cols+2]*invA[2*cols+2]/A[1*cols+1];
+    invA[0*cols+2]=-( A[0*cols+1]*invA[1*cols+2] + A[0*cols+2]*invA[2*cols+2] )/A[0*cols+0];
 }
 
 void matrixInternalCameraParameters(float* p,int rows,int cols,float* k){
 
-float pSub[9];
-float r[9];
-float rInv[9];
-float q[9];
-float qT[9];
-float b[9];
+    float pSub[9];
+    float r[9];
+    float rInv[9];
+    float q[9];
+    float qT[9];
+    float b[9];
 
-// extract a 3x3 sub matrix of p
-for (int row=0; row < rows; row++){
-	for (int col=0; col<cols-1;col++){
-            pSub[row*(cols-1)+col]=p[row*cols+col];
-	}
-}
+    // extract a 3x3 sub matrix of p
+    for (int row=0; row < rows; row++){
+        for (int col=0; col<cols-1;col++){
+                pSub[row*(cols-1)+col]=p[row*cols+col];
+        }
+    }
 
-printf("3x3 submatrix of p\n");
-matrixPrint(pSub,3,3);
+    printf("3x3 submatrix of p\n");
+    matrixPrint(pSub,3,3);
 
-// find the inverse of pSub with QR decomposition
-// Its inverse is B=RInv*QTranspose
-matrixQR(pSub,3,3,q,r);
-matrixTranspose(q,3,3,qT);
-matrixUpperTriangularInverse(r,3,3,rInv);
-matrixProduct(rInv,3,3,qT,3,3,b);
+    // find the inverse of pSub with QR decomposition
+    // Its inverse is B=RInv*QTranspose
+    matrixQR(pSub,3,3,q,r);
+    matrixTranspose(q,3,3,qT);
+    matrixUpperTriangularInverse(r,3,3,rInv);
+    matrixProduct(rInv,3,3,qT,3,3,b);
 
-//QR decompose the matrix B
-matrixQR(b,3,3,q,r);
+    //QR decompose the matrix B
+    matrixQR(b,3,3,q,r);
 
-int rows_k = rows;
-int cols_k = rows_k;
+    int rows_k = rows;
+    int cols_k = rows_k;
 
-int rows_r = rows;
-int cols_r = rows_r;
+    int rows_r = rows;
+    int cols_r = rows_r;
 
-//diagonals of calibration matirx
-k[0*cols_k +0] = 1/r[0*cols_r+0];
-k[1*cols_k +1] = 1/r[1*cols_r+1];
-k[2*cols_k +2] = 1.0;
-// off diagonals of the calibration matrix
-k[0*cols_k +2] = -r[0*cols_r +2]/r[0*cols_r+0];
-k[1*cols_k +2] = -r[1*cols_r +2]/r[1*cols_r+1];
+    //diagonals of calibration matirx
+    k[0*cols_k +0] = 1/r[0*cols_r+0];
+    k[1*cols_k +1] = 1/r[1*cols_r+1];
+    k[2*cols_k +2] = 1.0;
+    // off diagonals of the calibration matrix
+    k[0*cols_k +2] = -r[0*cols_r +2]/r[0*cols_r+0];
+    k[1*cols_k +2] = -r[1*cols_r +2]/r[1*cols_r+1];
 
 
 
