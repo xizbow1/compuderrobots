@@ -77,7 +77,7 @@ void matrixQR(float* a, int rows, int cols, float* q, float* r) {
     // Initialize temp array u
     float* u = new float[rows];
 
-    // Initialize Q and R to zero
+    // Initialize q and r to zero
     for (int i = 0; i < rows * cols; i++) {
         q[i] = 0.0;
         r[i] = 0.0;
@@ -85,12 +85,12 @@ void matrixQR(float* a, int rows, int cols, float* q, float* r) {
 
     // Gram-Schmidt process
     for (int i = 0; i < cols; i++) {
-        // Copy column i of A to u
+        // Copy column i of a to u
         for (int j = 0; j < rows; j++) {
             u[j] = a[j * cols + i];
         }
 
-        // Orthogonalize u against previous columns of Q
+        // Orthogonalize u against previous columns of q
         for (int j = 0; j < i; j++) {
             float dotP = 0.0;
             for (int k = 0; k < rows; k++) {
@@ -103,13 +103,9 @@ void matrixQR(float* a, int rows, int cols, float* q, float* r) {
         }
 
         // Compute the norm of u
-        float norm = 0.0;
-        for (int j = 0; j < rows; j++) {
-            norm += u[j] * u[j];
-        }
-        norm = sqrt(norm);
+        float norm = vectorNorm(u, rows);
 
-        // Normalize u and store in Q
+        // Normalize u and store in q
         r[i * cols + i] = norm;
         for (int j = 0; j < rows; j++) {
             if(norm == 0){
@@ -121,6 +117,10 @@ void matrixQR(float* a, int rows, int cols, float* q, float* r) {
     }
 
     delete[] u;
+}
+
+void matrixCrossProduct(float* u, float *v){
+    
 }
 
 
