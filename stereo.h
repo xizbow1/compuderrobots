@@ -3,5 +3,6 @@
 
 using namespace std;
 
+double std_dev(double x, double y);
 
 #endif

@@ -18,5 +18,5 @@ double std_dev(double x, double y) {
 }
 
 int main() {
-  cout << "Standard deviation: " << std_dev(1,49) << endl;
+  cout << "Standard deviation: " << std_dev(1,1) << endl;
 }
