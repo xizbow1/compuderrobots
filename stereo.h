@@ -3,6 +3,6 @@
 
 using namespace std;
 
-double std_dev(double x, double y);
+double correlationCoeffecient(float* x,int rowX,int colX, float* y, int rowY, int colY, int n);
 
 #endif
