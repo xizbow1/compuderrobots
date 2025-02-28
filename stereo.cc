@@ -23,7 +23,7 @@ double correlationCoeffecient(float* x,int rowX,int colX, float* y, int rowY, in
     double coeff = 0.0;
     double stdDevX = 0.0;
     double stdDevY = 0.0;
-    
+
     for(int i = 0; i < n; i++){
         sqX += x[rowX * colX + i] * x[rowX * colX + i];
         sqY += y[rowY * colY + i] * y[rowY * colY + i];
@@ -49,5 +49,3 @@ double correlationCoeffecient(float* x,int rowX,int colX, float* y, int rowY, in
     return coeff;
 
 }
-
-
