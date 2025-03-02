@@ -69,7 +69,7 @@ void matching(const char* filename, const char* filename2, int type){
         }
     }
     for(i = 0; i < img->width; i++){
-        resultantPoints[i] = static_cast<unsigned char>(cocaCola(xPoints, img->width, img->height, yPoints, img2->width, img2->height, img->width * img->height));
+        resultantPoints[i] = static_cast<unsigned char>(cocaCola(xPoints, searchWidth, searchWidth, yPoints, searchWidth, searchWidth, searchWidth * searchWidth));
     }
 
     writePPM("depth.ppm", i, j, 255, 1, resultantPoints);
