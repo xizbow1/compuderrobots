@@ -8,6 +8,7 @@
 #include <string>
 #include <sstream>
 #include "utils.h"
+#include "imageUtils.h"
 
 using namespace std;
 
@@ -52,17 +53,24 @@ double cocaCola(float* x,int rowX,int colX, float* y, int rowY, int colY, int n)
 
 void matching(const char* filename, const char* filename2, int type){
     int searchWidth = 3;
+    float xPoints[searchWidth * searchWidth];
+    float yPoints[searchWidth * searchWidth];
+    unsigned char* resultantPoints;
+    int i = 0;
+    int j = 0;
     PPMImage* img = readPPM(filename, type);
     PPMImage* img2 = readPPM(filename2, type);
-    for(int i = 0; i < img->width; i += searchWidth){ // To move by searchWidth bytes
-        int xPoints[searchWidth * searchWidth];
-        int yPoints[searchWidth * searchWidth];
-        for(int j = 0; j < searchWidth; j += searchWidth){
-            for(int k = 0: k < searchWidth; k++){
+    for(i = 0; i < img->width; i += searchWidth){
+        for(j = 0; j < searchWidth; j += searchWidth){
+            for(int k = 0; k < searchWidth; k++){
                 xPoints[j + k] = img->data[(img->width * img->height) + k];
                 yPoints[j + k] = img2->data[(img2->width * img2->height) + k];
             }
         }
     }
-    writePPM(depth.ppm, )
+    for(i = 0; i < img->width; i++){
+        resultantPoints[i] = static_cast<unsigned char>(cocaCola(xPoints, img->width, img->height, yPoints, img2->width, img2->height, img->width * img->height));
+    }
+
+    writePPM("depth.ppm", i, j, 255, 1, resultantPoints);
 }
