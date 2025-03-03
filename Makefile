@@ -5,7 +5,7 @@ CC = g++
 CFLAGS = -Wall 
 
 # Source files
-SRCS = readData.cc readParams.cc utils.cc matrixUtils.cc calib.cc
+SRCS = readData.cc readParams.cc utils.cc matrixUtils.cc stereo.cc imageUtils.cc calib.cc
 
 # Object files (replace .cc with .o)
 OBJS = $(SRCS:.cc=.o)
@@ -15,7 +15,7 @@ TARGET = calib
 
 # Rule to build the final executable
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) -ljpeg
 
 # Rule to build object files
 %.o: %.cc

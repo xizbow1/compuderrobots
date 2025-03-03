@@ -11,6 +11,7 @@
 #include "readData.h"
 #include "utils.h"
 #include "matrixUtils.h"
+#include "stereo.h"
 
 using namespace std;
 
@@ -158,6 +159,8 @@ matrixPrint(p,3,4);
 matrixInternalCameraParameters(p,3,4,k);
 printf("calibration matrix \n");
 matrixPrint(k,3,3);
+
+matching("leftBW.ppm","rightBW.ppm", 0);
 
 
 return 0;
