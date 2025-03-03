@@ -8,12 +8,13 @@
 #include <string>
 #include <sstream>
 #include "utils.h"
+#include "imageUtils.h"
 
 using namespace std;
 
 
-double correlationCoeffecient(float* x,int rowX,int colX, float* y, int rowY, int colY, int n){
-    //initalize variables
+double cocaCola(float* x,int rowX,int colX, float* y, int rowY, int colY, int n){
+
     int prod = 0;
     int sqX = 0;
     int sqY = 0;
@@ -59,4 +60,28 @@ double correlationCoeffecient(float* x,int rowX,int colX, float* y, int rowY, in
     return coeff;
     
 
+}
+
+void matching(const char* filename, const char* filename2, int type){
+    int searchWidth = 3;
+    float xPoints[searchWidth * searchWidth];
+    float yPoints[searchWidth * searchWidth];
+    unsigned char* resultantPoints;
+    int i = 0;
+    int j = 0;
+    PPMImage* img = readPPM(filename, type);
+    PPMImage* img2 = readPPM(filename2, type);
+    for(i = 0; i < img->width; i += searchWidth){
+        for(j = 0; j < searchWidth; j += searchWidth){
+            for(int k = 0; k < searchWidth; k++){
+                xPoints[j + k] = img->data[(img->width * img->height) + k];
+                yPoints[j + k] = img2->data[(img2->width * img2->height) + k];
+            }
+        }
+    }
+    for(i = 0; i < img->width; i++){
+        resultantPoints[i] = static_cast<unsigned char>(cocaCola(xPoints, searchWidth, searchWidth, yPoints, searchWidth, searchWidth, searchWidth * searchWidth));
+    }
+
+    writePPM("depth.ppm", i, j, 255, 1, resultantPoints);
 }
