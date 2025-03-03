@@ -36,3 +36,4 @@
 calib
 matrixUtilsTest
 utilsTest
+*.ppm

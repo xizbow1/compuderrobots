@@ -12,9 +12,7 @@
 
 using namespace std;
 
-
-double cocaCola(float* x,int rowX,int colX, float* y, int rowY, int colY, int n){
-
+double cocaCola(float* x, int rowX, int colX, float* y, int rowY, int colY, int n) {
     int prod = 0;
     int sqX = 0;
     int sqY = 0;
@@ -41,50 +39,55 @@ double cocaCola(float* x,int rowX,int colX, float* y, int rowY, int colY, int n)
         prod += x[row * colX + col] * y[row * colY + col];
     }
 
-    //find the mean of x and y squared
-    sqX = sqX/n;
-    sqY = sqY/n;
+    // find the mean of x and y squared
+    sqX = sqX / n;
+    sqY = sqY / n;
 
-    //find the mean of both mX and mY
-    mX = mX/n;
-    mY = mY/n;
-    
-    //find the convergence 
-    cov = (prod/n) - (mX*mY);
+    // find the mean of both mX and mY
+    mX = mX / n;
+    mY = mY / n;
 
-    //find the standard deviantion
-    stdDevX = sqrt(sqX - (mX*mX));
-    stdDevY = sqrt(sqY - (mY*mY));
+    // find the convergence 
+    cov = (prod / n) - (mX * mY);
 
-    //find and return the correlation coefficent
-    coeff = cov/(stdDevX*stdDevY);
+    // find the standard deviation
+    stdDevX = sqrt(sqX - (mX * mX));
+    stdDevY = sqrt(sqY - (mY * mY));
 
-    //coefficient close to 1 or -1 are similar closer to 0 is not similar
+    // find and return the correlation coefficient
+    coeff = cov / (stdDevX * stdDevY);
+
+    // coefficient close to 1 or -1 are similar closer to 0 is not similar
     return coeff;
-    
-
 }
 
-void matching(const char* filename, const char* filename2, int type){
+void matching(const char* filename, const char* filename2, int type) {
     int searchWidth = 3;
     float xPoints[searchWidth * searchWidth];
     float yPoints[searchWidth * searchWidth];
-    unsigned char* resultantPoints;
-    int i = 0;
-    int j = 0;
     PPMImage* img = readPPM(filename, type);
     PPMImage* img2 = readPPM(filename2, type);
-    for(i = 0; i < img->width; i += searchWidth){
-        for(j = 0; j < searchWidth; j += searchWidth){
-            for(int k = 0; k < searchWidth; k++){
-                xPoints[j + k] = img->data[(img->width * img->height) + k];
-                yPoints[j + k] = img2->data[(img2->width * img2->height) + k];
+
+    // Allocate memory for resultantPoints
+    unsigned char* resultantPoints = new unsigned char[img->width * img->height];
+
+    for (int i = 0; i < img->width; i += searchWidth) {
+        for (int j = 0; j < img->height; j += searchWidth) {
+            for (int k = 0; k < searchWidth; k++) {
+                int index = j * img->width + i + k;
+                if (index < img->width * img->height) {
+                    xPoints[k] = img->data[index];
+                    yPoints[k] = img2->data[index];
+                }
             }
+            resultantPoints[j * img->width + i] = static_cast<unsigned char>(cocaCola(xPoints, searchWidth, searchWidth, yPoints, searchWidth, searchWidth, searchWidth * searchWidth));
         }
     }
-    for(i = 0; i < img->width; i++){
-        resultantPoints[i] = static_cast<unsigned char>(cocaCola(xPoints, searchWidth, searchWidth, yPoints, searchWidth, searchWidth, searchWidth * searchWidth));
-    }
 
-    writePPM("depth.ppm", i, j, 255, 1, resultantPoints);
+    writePPM("depth.ppm", img->width, img->height, 255, 1, resultantPoints);
+
+    // Free allocated memory
+    delete[] resultantPoints;
+    freePPM(img);
+    freePPM(img2);
 }
