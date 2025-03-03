@@ -59,6 +59,7 @@ double cocaCola(float* x, int rowX, int colX, float* y, int rowY, int colY, int 
 
     // coefficient close to 1 or -1 are similar closer to 0 is not similar
     return coeff;
+
 }
 
 void matching(const char* filename, const char* filename2, int type) {
@@ -84,7 +85,7 @@ void matching(const char* filename, const char* filename2, int type) {
         }
     }
 
-    writePPM("depth.ppm", img->width, img->height, 255, 1, resultantPoints);
+    writePPM("depth.ppm", img->width, img->height, 255, 0, resultantPoints);
 
     // Free allocated memory
     delete[] resultantPoints;
