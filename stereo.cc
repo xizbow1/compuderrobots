@@ -23,10 +23,8 @@ double cocaCola(float* x, int rowX, int colX, float* y, int rowY, int colY, int 
     double stdDevX = 0.0;
     double stdDevY = 0.0;
 
-    for(int i = 0; i < n; i++){
-        int row = i / colX;
-        int col = i % colX;
-
+    for(int row = 0; row < n; row++){
+        for(int col = 0; col < n; col++){
         //find the squares of both x and y
         sqX += x[row * colX + col] * x[row * colX + col];
         sqY += y[row * colY + col] * y[row * colY + col];
@@ -37,6 +35,7 @@ double cocaCola(float* x, int rowX, int colX, float* y, int rowY, int colY, int 
 
         //find the product of x and y
         prod += x[row * colX + col] * y[row * colY + col];
+        }
     }
 
     // find the mean of x and y squared
