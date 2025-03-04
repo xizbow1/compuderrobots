@@ -23,8 +23,8 @@ double cocaCola(float* x, int rowX, int colX, float* y, int rowY, int colY, int 
     double stdDevX = 0.0;
     double stdDevY = 0.0;
 
-    for(int row = 0; row < n; row++){
-        for(int col = 0; col < n; col++){
+    for(int row = 0; row < rowX; row++){
+        for(int col = 0; col < colX; col++){
         //find the squares of both x and y
         sqX += x[row * colX + col] * x[row * colX + col];
         sqY += y[row * colY + col] * y[row * colY + col];
