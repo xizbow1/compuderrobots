@@ -7,8 +7,10 @@
 #include <ctime>
 #include <string>
 #include <sstream>
+#include <omp.h>
 #include "utils.h"
 #include "imageUtils.h"
+
 
 using namespace std;
 
@@ -53,16 +55,34 @@ double cocaCola(float* x, int rowX, int colX, float* y, int rowY, int colY, int 
     stdDevX = sqrt(sqX - (mX * mX));
     stdDevY = sqrt(sqY - (mY * mY));
 
-    // find and return the correlation coefficient
-    coeff = cov / (stdDevX * stdDevY);
+    // Check for zero standard deviation to avoid division by zero
+    if (stdDevX == 0 || stdDevY == 0) {
+        coeff = 0.0;
+    } else {
+        // find and return the correlation coefficient
+        coeff = cov / (stdDevX * stdDevY);
+    }
 
+    // Clamp the coefficient between -1 and 1
+    if (coeff > 1.0) {
+        coeff = 1.0;
+    } else if (coeff < -1.0) {
+        coeff = -1.0;
+    }
     // coefficient close to 1 or -1 are similar closer to 0 is not similar
     return coeff;
 
 }
 
 void matching(const char* filename, const char* filename2, int type) {
-    int searchWidth = 3;
+    int searchWidth = 7;
+    int maxDisparity = searchWidth;
+    int minDisparity = 1;
+    double focal = 520.0;
+    double baseline = 60.0;
+    double maxDistance = baseline*focal/minDisparity;
+    double distance;
+    double coeff;
     float xPoints[searchWidth * searchWidth];
     float yPoints[searchWidth * searchWidth];
     PPMImage* img = readPPM(filename, type);
@@ -70,24 +90,144 @@ void matching(const char* filename, const char* filename2, int type) {
 
     // Allocate memory for resultantPoints
     unsigned char* resultantPoints = new unsigned char[img->width * img->height];
+    unsigned char* disparityMap = new unsigned char[img->width * img->height];
 
-    for (int i = 0; i < img->width; i += searchWidth) {
-        for (int j = 0; j < img->height; j += searchWidth) {
-            for (int k = 0; k < searchWidth; k++) {
-                int index = j * img->width + i + k;
-                if (index < img->width * img->height) {
-                    xPoints[k] = img->data[index];
-                    yPoints[k] = img2->data[index];
+    for (int i = 0; i < img->width; i += 1) {
+        for (int j = 0; j < img->height; j += 1) {
+            double bestCoeff = -1.0;
+            int bestDisparity = 0;
+
+            for(int d = 0 ; d < maxDisparity; d++){
+                int index = 0;
+                for (int k = 0; k < searchWidth; k++) {
+                    for (int l = 0; l < searchWidth; l++) {
+                        int imgIndex = (j + k) * img->width + (i + l);
+                        int imgIndex2 = (j + k) * img2->width + (i + l - d);
+                        if ((i + l) < img->width && (j + k) < img->height && (i + l - d) >= 0) {
+                            xPoints[index] = img->data[imgIndex];
+                            yPoints[index] = img2->data[imgIndex2];
+                            index++;
+                        } else {
+                            xPoints[index] = 0;
+                            yPoints[index] = 0;
+                            index++;
+                        }
+                    }   
                 }
+                coeff = cocaCola(xPoints, searchWidth, searchWidth, yPoints, searchWidth, searchWidth, searchWidth * searchWidth);
+                if (coeff > bestCoeff){
+                    bestCoeff = coeff;
+                    bestDisparity = d;
+                }
+            }   
+            // Map the coefficient from [-1, 1] to [0, 255]
+            if (bestDisparity == 0) {
+                distance = maxDistance;
+            } else {
+                distance = baseline * focal / bestDisparity;
             }
-            resultantPoints[j * img->width + i] = static_cast<unsigned char>(cocaCola(xPoints, searchWidth, searchWidth, yPoints, searchWidth, searchWidth, searchWidth * searchWidth));
+            unsigned char mappedCoeff = static_cast<unsigned char>(255*(distance / maxDistance));
+            unsigned char mappedDisparity = static_cast<unsigned char>(255*(bestDisparity / maxDisparity));
+            resultantPoints[j * img->width + i] = mappedCoeff;
+            disparityMap[j * img->width + i] = mappedDisparity;
         }
     }
 
     writePPM("depth.ppm", img->width, img->height, 255, 0, resultantPoints);
-
+    writePPM("disparity.ppm", img->width, img->height, 255, 0, disparityMap);
+    
     // Free allocated memory
     delete[] resultantPoints;
+    delete[] disparityMap;
     freePPM(img);
     freePPM(img2);
 }
+
+int match2(){
+    const int windowWidth = 25; //must be odd
+    const int halfWindow = (windowWidth-1)/2;
+    const int searchWidth = 71; //pixels must be odd
+    const char* leftBW = "leftBW.ppm";
+    const char* rightBW = "rightBW.ppm";
+    const char* depthImageName = "depth.ppm";
+    const char* disparityImageName = "disparity.ppm";
+    PPMImage* leftImg;
+    PPMImage* rightImg;
+    int cols = 640;
+    int rows = 480;
+    int maxColor = 255;
+    double baseLine = 60.0;
+    double focalLength = 560.0;
+    double maxDisparity = searchWidth;
+    double minDisparity = 50.0;
+    double maxDistance = baseLine*focalLength/minDisparity;
+    double distance;
+    double disparity;
+    //allocate memory for the output images
+    unsigned char* depthImage = (unsigned char*) malloc(rows*cols * sizeof(unsigned char));
+    unsigned char* disparityImage = (unsigned char*) malloc(rows*cols * sizeof(unsigned char));
+    //read images
+    leftImg = readPPM(leftBW,0);
+    rightImg = readPPM(rightBW,0);
+    // put your code here to do the stereo matching
+    
+    float* leftPixels = new float[windowWidth * windowWidth];
+    float* rightPixels = new float[windowWidth * windowWidth];
+    double* pixelCorr = new double[searchWidth];
+
+    
+    for(int row = halfWindow; row < rows-halfWindow; row++){
+        for(int col = halfWindow; col < cols-halfWindow; col++){
+            int index = 0;
+            for(int k = 0; k < searchWidth; k++){
+
+                for(int i = -halfWindow; i <= halfWindow; i++){
+                    for(int j = -halfWindow; j <= halfWindow; j++){
+                        leftPixels[(i + halfWindow) * windowWidth + (j + halfWindow)] = leftImg->data[(row+i)*cols+(col+j)];
+                        //printf("left: %7.1f", leftPixels[(i + halfWindow) * windowWidth + (j + halfWindow)]);
+                        rightPixels[(i + halfWindow) * windowWidth + (j + halfWindow)] = rightImg->data[(row+i)*cols+(col+k+j)];
+                        //printf("right: %7.1f", rightPixels[(i + halfWindow) * windowWidth + (j + halfWindow)]);
+                    }
+                }
+                pixelCorr[index] = cocaCola(leftPixels, windowWidth, windowWidth, rightPixels, windowWidth, windowWidth, windowWidth*windowWidth);
+                index++;
+
+            //compute disparity
+            double max = 0;
+            for(int k = 0; k < searchWidth; k++){
+                if(pixelCorr[k] > max){
+                    max=pixelCorr[k];
+                    disparity = searchWidth-k;
+                }
+            }
+
+            if(disparity < minDisparity){
+                
+                distance = baseLine*focalLength/disparity;
+                depthImage[row*cols+col] = (unsigned char) (255 * (distance / maxDistance));
+                disparityImage[row * cols + col] = (unsigned char) (255 * (disparity / minDisparity));
+            } else {
+                depthImage[row*cols+col] = 255;
+                disparityImage[row * cols + col] = 255;
+            }
+                
+                
+            }
+
+        }
+    }
+
+    writePPM(depthImageName, cols, rows, maxColor, 0, depthImage);
+    writePPM(disparityImageName, cols, rows, maxColor, 0, disparityImage);
+    printf("done.\n");
+
+    delete[] leftPixels;
+    delete[] rightPixels;
+    delete[] pixelCorr;
+    free(depthImage);
+    free(disparityImage);
+    freePPM(leftImg);
+    freePPM(rightImg);
+    return 0;
+    }
+    

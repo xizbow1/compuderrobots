@@ -160,7 +160,7 @@ matrixInternalCameraParameters(p,3,4,k);
 printf("calibration matrix \n");
 matrixPrint(k,3,3);
 
-matching("leftBW.ppm","rightBW.ppm", 0);
+match2();
 
 
 return 0;
