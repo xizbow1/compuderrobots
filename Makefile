@@ -2,7 +2,7 @@
 CC = g++ 
 
 # Compiler flags
-CFLAGS = -Wall 
+CFLAGS = -Wall -fopenmp
 
 # Source files
 SRCS = readData.cc readParams.cc utils.cc matrixUtils.cc stereo.cc imageUtils.cc calib.cc

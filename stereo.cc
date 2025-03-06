@@ -15,11 +15,11 @@
 using namespace std;
 
 double cocaCola(float* x, int rowX, int colX, float* y, int rowY, int colY, int n) {
-    int prod = 0;
-    int sqX = 0;
-    int sqY = 0;
-    int mX = 0;
-    int mY = 0;
+    double prod = 0.0;
+    double sqX = 0.0;
+    double sqY = 0.0;
+    double mX = 0.0;
+    double mY = 0.0;
     double cov = 0.0;
     double coeff = 0.0;
     double stdDevX = 0.0;
@@ -94,7 +94,7 @@ void matching(const char* filename, const char* filename2, int type) {
 
     for (int i = 0; i < img->width; i += 1) {
         for (int j = 0; j < img->height; j += 1) {
-            double bestCoeff = -1.0;
+            double bestCoeff = 0.0;
             int bestDisparity = 0;
 
             for(int d = 0 ; d < maxDisparity; d++){
@@ -144,7 +144,8 @@ void matching(const char* filename, const char* filename2, int type) {
 }
 
 int match2(){
-    const int windowWidth = 25; //must be odd
+    double start_time = omp_get_wtime();
+    const int windowWidth = 15; //must be odd
     const int halfWindow = (windowWidth-1)/2;
     const int searchWidth = 71; //pixels must be odd
     const char* leftBW = "leftBW.ppm";
@@ -153,77 +154,93 @@ int match2(){
     const char* disparityImageName = "disparity.ppm";
     PPMImage* leftImg;
     PPMImage* rightImg;
-    int cols = 640;
-    int rows = 480;
+    int cols = 320;
+    int rows = 240;
     int maxColor = 255;
     double baseLine = 60.0;
-    double focalLength = 560.0;
+    double focalLength = 520.0;
     double maxDisparity = searchWidth;
-    double minDisparity = 50.0;
+    double minDisparity = 25.0;
     double maxDistance = baseLine*focalLength/minDisparity;
     double distance;
-    double disparity;
+    double disparity = 0;
+    int col;
+    int index;
+    int k;
+    double maxCorr;
     //allocate memory for the output images
     unsigned char* depthImage = (unsigned char*) malloc(rows*cols * sizeof(unsigned char));
     unsigned char* disparityImage = (unsigned char*) malloc(rows*cols * sizeof(unsigned char));
     //read images
     leftImg = readPPM(leftBW,0);
     rightImg = readPPM(rightBW,0);
-    // put your code here to do the stereo matching
-    
-    float* leftPixels = new float[windowWidth * windowWidth];
-    float* rightPixels = new float[windowWidth * windowWidth];
-    double* pixelCorr = new double[searchWidth];
 
-    
+    for(int i = 0; i < rows*cols; i++){
+        depthImage[i] = 0;
+        disparityImage[i] = 0;
+    }
+
+    int num_threads = 8;
+    omp_set_num_threads(num_threads);
+    printf("Processing with %d threads\n", num_threads);
+
+    #pragma omp parallel for schedule(dynamic, 8) private(col, index, k, disparity, distance, maxCorr)
     for(int row = halfWindow; row < rows-halfWindow; row++){
+        float* leftPixels = new float[windowWidth * windowWidth];
+        float* rightPixels = new float[windowWidth * windowWidth];
+        double* pixelCorr = new double[searchWidth];
+
         for(int col = halfWindow; col < cols-halfWindow; col++){
             int index = 0;
-            for(int k = 0; k < searchWidth; k++){
+            for(int k = -searchWidth/2; k < 0; k++){
 
                 for(int i = -halfWindow; i <= halfWindow; i++){
                     for(int j = -halfWindow; j <= halfWindow; j++){
                         leftPixels[(i + halfWindow) * windowWidth + (j + halfWindow)] = leftImg->data[(row+i)*cols+(col+j)];
                         //printf("left: %7.1f", leftPixels[(i + halfWindow) * windowWidth + (j + halfWindow)]);
-                        rightPixels[(i + halfWindow) * windowWidth + (j + halfWindow)] = rightImg->data[(row+i)*cols+(col+k+j)];
+                        int rightIndex = (row+i)*cols+(col+k+j);
+                        if(rightIndex >= 0 && rightIndex < rows*cols){
+                        rightPixels[(i + halfWindow) * windowWidth + (j + halfWindow)] = rightImg->data[rightIndex];
+                        }
+                        else {
+                            rightPixels[(i + halfWindow) * windowWidth + (j + halfWindow)] = 0;
+                        }
                         //printf("right: %7.1f", rightPixels[(i + halfWindow) * windowWidth + (j + halfWindow)]);
                     }
                 }
                 pixelCorr[index] = cocaCola(leftPixels, windowWidth, windowWidth, rightPixels, windowWidth, windowWidth, windowWidth*windowWidth);
-                index++;
-
-            //compute disparity
-            double max = 0;
-            for(int k = 0; k < searchWidth; k++){
-                if(pixelCorr[k] > max){
-                    max=pixelCorr[k];
-                    disparity = searchWidth-k;
+                index++;               
+                
+            }
+                //compute disparity
+                double maxCorr = -1.0;
+                for(int k = 0; k < index; k++){
+                    if(pixelCorr[k] > maxCorr){
+                        maxCorr = pixelCorr[k];
+                        disparity = abs(searchWidth/2 - k);
+                    }
                 }
-            }
-
-            if(disparity < minDisparity){
-                
-                distance = baseLine*focalLength/disparity;
-                depthImage[row*cols+col] = (unsigned char) (255 * (distance / maxDistance));
-                disparityImage[row * cols + col] = (unsigned char) (255 * (disparity / minDisparity));
-            } else {
-                depthImage[row*cols+col] = 255;
-                disparityImage[row * cols + col] = 255;
-            }
-                
-                
-            }
-
+            
+                if(maxCorr > 0.5 && disparity < minDisparity){
+                    distance = baseLine*focalLength/disparity;
+                    depthImage[row*cols+col] = (unsigned char) (255 * (distance / maxDistance));
+                    disparityImage[row * cols + col] = (unsigned char) (255 * (disparity / maxDisparity));
+                    } else {
+                    depthImage[row*cols+col] = 255;
+                    disparityImage[row * cols + col] = 255;
+                    }
         }
+        delete[] leftPixels;
+        delete[] rightPixels;
+        delete[] pixelCorr;
     }
 
     writePPM(depthImageName, cols, rows, maxColor, 0, depthImage);
     writePPM(disparityImageName, cols, rows, maxColor, 0, disparityImage);
-    printf("done.\n");
 
-    delete[] leftPixels;
-    delete[] rightPixels;
-    delete[] pixelCorr;
+    double end_time = omp_get_wtime();
+    printf("Processing completed in %.2f seconds\n", end_time - start_time);
+
     free(depthImage);
     free(disparityImage);
     freePPM(leftImg);
