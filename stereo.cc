@@ -160,7 +160,7 @@ int match2(){
     double baseLine = 60.0;
     double focalLength = 520.0;
     double maxDisparity = searchWidth;
-    double minDisparity = 25.0;
+    double minDisparity = .1;
     double maxDistance = baseLine*focalLength/minDisparity;
     double distance;
     double disparity = 0;

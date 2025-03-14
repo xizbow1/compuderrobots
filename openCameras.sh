@@ -1,15 +1,16 @@
 #!/bin/bash
 
-# Starting Camera 1
-echo "Opening Camera 1 (rotated)"
-nvgstcapture-1.0 --camsrc=0 --orientation 2
+# Starting Left Camera
+echo "Opening Left Camera (rotated)"
+gnome-terminal -- bash -c "nvgstcapture-1.0 --sensorid=0 --orientation 2; exec bash"
 
 # Let Camera 1 start up
 sleep 2
 
-# Starting Camera 2
-echo "Opening Camera 2 (rotated)"
-nvgstcapture-1.0 --camsrc=1 --orientation 2
+# Starting Right Camera 
+echo "Opening Right Camera  (rotated)"
+gnome-terminal -- bash -c "nvgstcapture-1.0 --sensorid=1 --orientation 2; exec bash"
+
 
 
 
