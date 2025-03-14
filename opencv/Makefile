@@ -10,7 +10,7 @@ LDLIBPATH = -I/usr/include/opencv4
 LDLIBS = -I/usr/include/opencv4 -ljpeg -lm -lopencv_core -lopencv_imgproc -lopencv_calib3d -lopencv_highgui -lopencv_imgcodecs -lopencv_calib3d -llapacke -llapack -lblas
 
 # Source files
-SRCS = ocvPose.cc imageUtils.cc utils.cc matrixUtils.cc readParams.cc readData.cc
+SRCS = match.cc
 
 
 
@@ -18,7 +18,7 @@ SRCS = ocvPose.cc imageUtils.cc utils.cc matrixUtils.cc readParams.cc readData.c
 OBJS = $(SRCS:.cc=.o)
 
 # Output executable
-TARGET = ocvPose 
+TARGET = match
 
 # Rule to build the final executable
 $(TARGET): $(OBJS)
