@@ -22,7 +22,7 @@ double time_used;
 
 //read images
 Mat left  = imread("leftBW.ppm", IMREAD_GRAYSCALE);
-Mat right = imread("warpedImg.ppm", IMREAD_GRAYSCALE);
+Mat right = imread("rightBW.ppm", IMREAD_GRAYSCALE);
 Mat depth = Mat::zeros(rows,cols, CV_8UC1);
 
 start = clock();

@@ -1,5 +1,5 @@
 # Compiler
-CC =gcc 
+CC = gcc 
 
 # Compiler flags
 CCFLAGS =  -I/usr/include/opencv4 
