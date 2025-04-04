@@ -27,20 +27,20 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     int disparity;
     double distance;
     double sumSqDiff;
-    int minSqDiff;
+    int minSumSqDiff = INT_MAX;
     int diff;
 
-    if(row < halfwindow || row > rows-halfwindow || col < halfWindow || col > cols - halfWindow) return;
+    if(row < halfWindow || row > rows-halfWindow || col < halfWindow || col > cols - halfWindow) return;
 
     //compute sum of squred differecnes each shifted window
 
     for(int k=0; k<maxDisparity;k++){
         sumSqDiff=0.0;
-        for(int i = -halfwindow; i<halfWindow+1;i++){
+        for(int i = -halfWindow; i<halfWindow+1;i++){
             for(int j = -halfWindow; j<halfWindow+1;j++){
 
                     leftPixel = left[(row+i)*cols+(col+j)];
-                    rightPixel = right[(row+i)*cols+(cols+j-k)];
+                    rightPixel = right[(row+i)*cols+(col+j-k)];
                     diff = leftPixel-rightPixel;
                     sumSqDiff += diff*diff;
             }
@@ -48,8 +48,8 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
 
         
         //compute min sum square diff
-        if(sumSqDiff < minSqDiff){
-            minSqDiff = sumSqDiff;
+        if(sumSqDiff < minSumSqDiff){
+            minSumSqDiff = sumSqDiff;
             disparity = k;
         }
     }
