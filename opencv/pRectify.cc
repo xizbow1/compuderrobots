@@ -60,7 +60,14 @@ Mat T = (Mat_<double>(3,1) << -58.96213584809675,
     Mat rectifiedLeft, rectifiedRight;
     remap(leftImage, rectifiedLeft, map1x, map1y, INTER_LINEAR);
     remap(rightImage, rectifiedRight, map2x, map2y, INTER_LINEAR);
-    
+   
+    FileStorage fs("lookupTables.xml",FileStorage::WRITE);
+    fs << "Map1x" << map1x;
+    fs << "Map1y" << map1y;
+    fs << "Map2x" << map2x;
+    fs << "Map2y" << map2y;
+    fs.release();
+
     // Display results
     imshow("Rectified Left Image", rectifiedLeft);
     imshow("Rectified Right Image", rectifiedRight);
