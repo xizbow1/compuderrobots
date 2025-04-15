@@ -2,7 +2,7 @@
 //
 #include <Servo.h>
 
-Servo myServo;
+Servo steeringServo;
 int portSpeed =9600;
 
 //right motor
@@ -25,7 +25,7 @@ void setup()
   pinMode(pinIN3, OUTPUT);
   pinMode(pinIN4, OUTPUT);
   //steering servo
-  myServo.attach(9);
+  steeringServo.attach(9);
   
 }
 
@@ -38,7 +38,7 @@ void turn(int theta){
   //Not Turning
   if(theta == 90){
     
-    myServo.write(theta);
+    steeringServo.write(theta);
     
     vI = vO;
     digitalWrite(pinIN1, LOW);
@@ -51,7 +51,7 @@ void turn(int theta){
   //Right turn
   }else if(theta > 90){
     
-    myServo.write(theta);
+    steeringServo.write(theta);
     
   	digitalWrite(pinIN1, LOW);
   	digitalWrite(pinIN2, HIGH);
@@ -63,7 +63,7 @@ void turn(int theta){
     
   //Left Turn
   }else if(theta < 90){
-    myServo.write(theta);
+    steeringServo.write(theta);
     
     digitalWrite(pinIN1, LOW);
     digitalWrite(pinIN2, HIGH);
@@ -100,7 +100,7 @@ void loop()
   delay(3000);
   
   //stop
-  myServo.write(90);
+  steeringServo.write(90);
   analogWrite(pinENA12, 0);
   analogWrite(pinENA34, 0);
   delay(3000);
