@@ -3,7 +3,8 @@
 #include <Servo.h>
 
 Servo steeringServo;
-int portSpeed =9600;
+int leftSpeed = 0;
+int rightSpeed = 0;
 
 //right motor
 const int pinENA12 = 3;
@@ -29,79 +30,72 @@ void setup()
   
 }
 
-void turn(int theta){
-  const int wheelBase = 12;
+//function drive
+void drive(int theta, int speed){
+  double L = 23.5;
+  double W = 16.25;
+  double wheelBase = W/L;
   double rad = (theta * PI) / 180;
-  double vO = (1.0 + (1.0/2.0)*(wheelBase)*(tan(rad)));
-  double vI = (1.0 - (1.0/2.0)*(wheelBase)*(tan(rad)));
+  double vR = speed*(1.0 + 0.5 *((wheelBase)/(tan(rad))));
+  double vL = speed*(1.0 - 0.5 *((wheelBase)/(tan(rad))));
+  digitalWrite(pinIN1, HIGH);
+  digitalWrite(pinIN2, LOW);
+  digitalWrite(pinIN3, HIGH);
+  digitalWrite(pinIN4, LOW);
   
-  //Not Turning
+  //Straight
   if(theta == 90){
-    
     steeringServo.write(theta);
+    vR = speed;
+    vL = speed;
+    delay(500);
+  	analogWrite(pinENA12, vR);
+  	analogWrite(pinENA34, vL);
     
-    vI = vO;
-    digitalWrite(pinIN1, LOW);
-  	digitalWrite(pinIN2, HIGH);
-  	digitalWrite(pinIN3, HIGH);
-  	digitalWrite(pinIN4, LOW);
-  	analogWrite(pinENA12, vO);
-  	analogWrite(pinENA34, vI);
-    
-  //Right turn
-  }else if(theta > 90){
-    
+  //Turn
+  }else{
     steeringServo.write(theta);
-    
-  	digitalWrite(pinIN1, LOW);
-  	digitalWrite(pinIN2, HIGH);
-  	digitalWrite(pinIN3, HIGH);
-  	digitalWrite(pinIN4, LOW);
-    
-  	analogWrite(pinENA12, vI);
-  	analogWrite(pinENA34, vO);
-    
-  //Left Turn
-  }else if(theta < 90){
-    steeringServo.write(theta);
-    
-    digitalWrite(pinIN1, LOW);
-    digitalWrite(pinIN2, HIGH);
-    digitalWrite(pinIN3, HIGH);
-    digitalWrite(pinIN4, LOW);
-    
-    analogWrite(pinENA12, vO);
-    analogWrite(pinENA34, vI);
+	delay(500);    
+  	analogWrite(pinENA12, vR);
+  	analogWrite(pinENA34, vL);
   }
 }
 
+//function stop()
+void stop(){
+  steeringServo.write(90);
+  digitalWrite(pinIN1, LOW);
+  digitalWrite(pinIN2, LOW);
+  digitalWrite(pinIN3, LOW);
+  digitalWrite(pinIN4, LOW);
+  analogWrite(pinENA12, 0);
+  analogWrite(pinENA34, 0);
+}
+
 void loop()
-{
-  
-  
+{  
+ 
   //straight
-  turn(90);
+  drive(90,128);//call drive with the angle and the speed
   delay(3000);
   
   //right turn
-  turn(130);
+  drive(130,128);
   delay(3000);
     
   //straight
-  turn(90);
+  drive(90,128);
   delay(3000);
   
   //left turn
-  turn(50);
+  drive(50,128);
   delay(3000);
   
   //straight
-  turn(90);
+  drive(90,128);
   delay(3000);
   
   //stop
-  steeringServo.write(90);
-  analogWrite(pinENA12, 0);
-  analogWrite(pinENA34, 0);
+  stop();
   delay(3000);
 }
