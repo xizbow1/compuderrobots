@@ -30,14 +30,21 @@ void setup()
   
 }
 
-//function drive
-void drive(int theta, int speed){
+//function drive()
+//Takes 1 parameter integer
+//returns nothing
+void drive(int theta){
+  int speed = 128;
   double L = 23.5;
   double W = 16.25;
-  double wheelBase = W/L;
-  double rad = (theta * PI) / 180;
+  double wheelBase = W/L;//calculate the wheel base
+  double rad = (theta * PI) / 180;//Convert theta to radians
+  
+  //calculate right and left speed based on turn angle (theta)
   double vR = speed*(1.0 + 0.5 *((wheelBase)/(tan(rad))));
   double vL = speed*(1.0 - 0.5 *((wheelBase)/(tan(rad))));
+  
+  //Sending power to the motors
   digitalWrite(pinIN1, HIGH);
   digitalWrite(pinIN2, LOW);
   digitalWrite(pinIN3, HIGH);
@@ -45,7 +52,45 @@ void drive(int theta, int speed){
   
   //Straight
   if(theta == 90){
+    steeringServo.write(theta);//set turning angle to theta
+    vR = speed;
+    vL = speed;
+    delay(500);
+  	analogWrite(pinENA12, vR);
+  	analogWrite(pinENA34, vL);
+    
+  //Turn
+  }else{
     steeringServo.write(theta);
+	delay(500);    
+  	analogWrite(pinENA12, vR);
+  	analogWrite(pinENA34, vL);
+  }
+}
+
+//Function drive reverse
+//Takes 1 parameter Integer
+//returns nothing
+void driveRev(int theta){
+    int speed = 128;
+  double L = 23.5;
+  double W = 16.25;
+  double wheelBase = W/L;//calculate the wheel base
+  double rad = (theta * PI) / 180;//Convert theta to radians
+  
+  //calculate right and left speed based on turn angle (theta)
+  double vR = speed*(1.0 + 0.5 *((wheelBase)/(tan(rad))));
+  double vL = speed*(1.0 - 0.5 *((wheelBase)/(tan(rad))));
+  
+  //Sending power to the motors
+  digitalWrite(pinIN1, LOW);
+  digitalWrite(pinIN2, HIGH);
+  digitalWrite(pinIN3, LOW);
+  digitalWrite(pinIN4, HIGH);
+  
+  //Straight
+  if(theta == 90){
+    steeringServo.write(theta);//set turning angle to theta
     vR = speed;
     vL = speed;
     delay(500);
@@ -62,38 +107,61 @@ void drive(int theta, int speed){
 }
 
 //function stop()
+//no parameters
+//returns nothing
 void stop(){
-  steeringServo.write(90);
+  steeringServo.write(90);//set wheels straight
+  //stop power to wheels
   digitalWrite(pinIN1, LOW);
   digitalWrite(pinIN2, LOW);
   digitalWrite(pinIN3, LOW);
   digitalWrite(pinIN4, LOW);
+  //set drive speed to 0
   analogWrite(pinENA12, 0);
   analogWrite(pinENA34, 0);
 }
 
 void loop()
 {  
- 
-  //straight
-  drive(90,128);//call drive with the angle and the speed
-  delay(3000);
+  //figure 8 drive
   
   //right turn
-  drive(130,128);
-  delay(3000);
+  drive(160);
+  delay(2000);
     
   //straight
-  drive(90,128);
-  delay(3000);
+  drive(90);
+  delay(1000);
   
   //left turn
-  drive(50,128);
-  delay(3000);
+  drive(20);
+  delay(2000);
   
   //straight
-  drive(90,128);
+  drive(90);
+  delay(1000);
+  
+  //stop
+  stop();
   delay(3000);
+  
+  //figure 8 reverse
+  
+  //reverse
+  driveRev(90);
+  delay(1000);
+  
+  //left turn;
+  driveRev(160);
+  delay(2000);
+  
+  //reverse
+  driveRev(90);
+  delay(1000);
+  
+  //right turn;
+  driveRev(20);
+  delay(2000);
   
   //stop
   stop();
