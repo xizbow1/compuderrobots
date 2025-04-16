@@ -33,8 +33,8 @@ void setup()
 //function drive()
 //Takes 1 parameter integer
 //returns nothing
-void drive(int theta){
-  int speed = 128;
+void drive(int theta, bool dir){
+  int speed = 64;
   double L = 23.5;
   double W = 16.25;
   double wheelBase = W/L;//calculate the wheel base
@@ -45,48 +45,17 @@ void drive(int theta){
   double vL = speed*(1.0 - 0.5 *((wheelBase)/(tan(rad))));
   
   //Sending power to the motors
-  digitalWrite(pinIN1, HIGH);
-  digitalWrite(pinIN2, LOW);
-  digitalWrite(pinIN3, HIGH);
-  digitalWrite(pinIN4, LOW);
-  
-  //Straight
-  if(theta == 90){
-    steeringServo.write(theta);//set turning angle to theta
-    vR = speed;
-    vL = speed;
-    delay(500);
-  	analogWrite(pinENA12, vR);
-  	analogWrite(pinENA34, vL);
-    
-  //Turn
-  }else{
-    steeringServo.write(theta);
-	delay(500);    
-  	analogWrite(pinENA12, vR);
-  	analogWrite(pinENA34, vL);
+  if(dir == true){
+  	digitalWrite(pinIN1, HIGH);
+  	digitalWrite(pinIN2, LOW);
+  	digitalWrite(pinIN3, HIGH);
+  	digitalWrite(pinIN4, LOW);
+  } else {
+    digitalWrite(pinIN1, LOW);
+  	digitalWrite(pinIN2, HIGH);
+  	digitalWrite(pinIN3, LOW);
+  	digitalWrite(pinIN4, HIGH);
   }
-}
-
-//Function drive reverse
-//Takes 1 parameter Integer
-//returns nothing
-void driveRev(int theta){
-    int speed = 128;
-  double L = 23.5;
-  double W = 16.25;
-  double wheelBase = W/L;//calculate the wheel base
-  double rad = (theta * PI) / 180;//Convert theta to radians
-  
-  //calculate right and left speed based on turn angle (theta)
-  double vR = speed*(1.0 + 0.5 *((wheelBase)/(tan(rad))));
-  double vL = speed*(1.0 - 0.5 *((wheelBase)/(tan(rad))));
-  
-  //Sending power to the motors
-  digitalWrite(pinIN1, LOW);
-  digitalWrite(pinIN2, HIGH);
-  digitalWrite(pinIN3, LOW);
-  digitalWrite(pinIN4, HIGH);
   
   //Straight
   if(theta == 90){
@@ -126,19 +95,19 @@ void loop()
   //figure 8 drive
   
   //right turn
-  drive(160);
+  drive(160,true);
   delay(2000);
     
   //straight
-  drive(90);
+  drive(90,true);
   delay(1000);
   
   //left turn
-  drive(20);
+  drive(20,true);
   delay(2000);
   
   //straight
-  drive(90);
+  drive(90,true);
   delay(1000);
   
   //stop
@@ -148,19 +117,19 @@ void loop()
   //figure 8 reverse
   
   //reverse
-  driveRev(90);
+  drive(90,false);
   delay(1000);
   
   //left turn;
-  driveRev(160);
+  drive(20,false);
   delay(2000);
   
   //reverse
-  driveRev(90);
+  drive(90,false);
   delay(1000);
   
   //right turn;
-  driveRev(20);
+  drive(160,false);
   delay(2000);
   
   //stop
