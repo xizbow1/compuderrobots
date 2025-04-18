@@ -144,8 +144,10 @@ void loop()
   } else if(cmd == "STR"){
     
     drive(intValue, currDir, currSpd);
+
   } else if(cmd == "STP"){
     
     stop();
+    
   }
 }
