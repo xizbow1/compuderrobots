@@ -15,6 +15,8 @@ const int pinENA34 = 6;
 const int pinIN3 = 7;
 const int pinIN4 = 8;
 
+int prevTheta = 0;
+
 void setup()
 {
   //right motor
@@ -34,6 +36,7 @@ void setup()
 //Takes 1 parameter integer
 //returns nothing
 void drive(int theta, bool dir){
+ prevTheta = theta;
   int speed = 64;
   double L = 23.5;
   double W = 16.25;
@@ -59,6 +62,9 @@ void drive(int theta, bool dir){
   
   //Straight
   if(theta == 90){
+    if (prevTheta > 90){
+      theta = 84;
+    }
     steeringServo.write(theta);//set turning angle to theta
     vR = speed;
     vL = speed;
@@ -79,7 +85,13 @@ void drive(int theta, bool dir){
 //no parameters
 //returns nothing
 void stop(){
-  steeringServo.write(90);//set wheels straight
+  if (prevTheta > 90){
+    steeringServo.write(84);
+    prevTheta = 84;
+  }else{
+    steeringServo.write(90);//set wheels straight
+    prevTheta = 90;
+  }
   //stop power to wheels
   digitalWrite(pinIN1, LOW);
   digitalWrite(pinIN2, LOW);
@@ -92,6 +104,9 @@ void stop(){
 
 void loop()
 {  
+  steeringServo.write(90);//set wheels straight
+  delay(1000);
+  
   //figure 8 drive
   
   //right turn
