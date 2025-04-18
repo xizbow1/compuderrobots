@@ -15,10 +15,21 @@ const int pinENA34 = 6;
 const int pinIN3 = 7;
 const int pinIN4 = 8;
 
-int prevTheta = 0;
+int prevAngle = 0;
+int currSpd = 0;
+bool currDir;
+
+String cmdRec = "";
+String cmd = "";
+String value = "";
+int intValue = 0;
+int portSpeed = 9600;
 
 void setup()
 {
+  //Serial port setup
+  Serial.begin(portSpeed);
+ 
   //right motor
   pinMode(pinENA12, OUTPUT);
   pinMode(pinIN1, OUTPUT);
@@ -35,39 +46,46 @@ void setup()
 //function drive()
 //Takes 1 parameter integer
 //returns nothing
-void drive(int theta, bool dir){
- prevTheta = theta;
-  int speed = 64;
+void drive(int theta, bool dir, int spd){
+  if(theta < 25){
+    theta = 25;
+  } else if(theta > 155){
+    theta = 155;
+  }
+  currSpd = spd;
+  prevAngle = theta;
   double L = 23.5;
   double W = 16.25;
   double wheelBase = W/L;//calculate the wheel base
   double rad = (theta * PI) / 180;//Convert theta to radians
   
   //calculate right and left speed based on turn angle (theta)
-  double vR = speed*(1.0 + 0.5 *((wheelBase)/(tan(rad))));
-  double vL = speed*(1.0 - 0.5 *((wheelBase)/(tan(rad))));
+  double vR = spd*(1.0 + 0.5 *((wheelBase)/(tan(rad))));
+  double vL = spd*(1.0 - 0.5 *((wheelBase)/(tan(rad))));
   
   //Sending power to the motors
   if(dir == true){
-  	digitalWrite(pinIN1, HIGH);
-  	digitalWrite(pinIN2, LOW);
+    currDir = dir;
+  	digitalWrite(pinIN1, LOW);
+  	digitalWrite(pinIN2, HIGH);
   	digitalWrite(pinIN3, HIGH);
   	digitalWrite(pinIN4, LOW);
   } else {
-    digitalWrite(pinIN1, LOW);
-  	digitalWrite(pinIN2, HIGH);
+    currDir = dir;
+    digitalWrite(pinIN1, HIGH);
+  	digitalWrite(pinIN2, LOW);
   	digitalWrite(pinIN3, LOW);
   	digitalWrite(pinIN4, HIGH);
   }
   
   //Straight
   if(theta == 90){
-    if (prevTheta > 90){
+    if(prevAngle > 90){
       theta = 84;
     }
     steeringServo.write(theta);//set turning angle to theta
-    vR = speed;
-    vL = speed;
+    vR = spd;
+    vL = spd;
     delay(500);
   	analogWrite(pinENA12, vR);
   	analogWrite(pinENA34, vL);
@@ -85,12 +103,10 @@ void drive(int theta, bool dir){
 //no parameters
 //returns nothing
 void stop(){
-  if (prevTheta > 90){
+  if(prevAngle > 90){
     steeringServo.write(84);
-    prevTheta = 84;
   }else{
-    steeringServo.write(90);//set wheels straight
-    prevTheta = 90;
+  steeringServo.write(90);//set wheels straight
   }
   //stop power to wheels
   digitalWrite(pinIN1, LOW);
@@ -103,51 +119,33 @@ void stop(){
 }
 
 void loop()
-{  
-  steeringServo.write(90);//set wheels straight
-  delay(1000);
-  
-  //figure 8 drive
-  
-  //right turn
-  drive(160,true);
-  delay(2000);
+{
+  if(Serial.available()){
+   
+    cmdRec = Serial.readStringUntil('\n');
+    cmd = cmdRec.substring(0,3);
+    value = cmdRec.substring(3,6);
+    intValue = value.toInt();
     
-  //straight
-  drive(90,true);
-  delay(1000);
+    //Serial.print("recieved");
+    Serial.println(cmd);
+    //Serial.print("and ");
+    Serial.println(value);
+  }
   
-  //left turn
-  drive(20,true);
-  delay(2000);
-  
-  //straight
-  drive(90,true);
-  delay(1000);
-  
-  //stop
-  stop();
-  delay(3000);
-  
-  //figure 8 reverse
-  
-  //reverse
-  drive(90,false);
-  delay(1000);
-  
-  //left turn;
-  drive(20,false);
-  delay(2000);
-  
-  //reverse
-  drive(90,false);
-  delay(1000);
-  
-  //right turn;
-  drive(160,false);
-  delay(2000);
-  
-  //stop
-  stop();
-  delay(3000);
+  if(cmd == "FWD"){
+    
+    drive(90, true, intValue);
+    
+  } else if(cmd == "BWD"){
+    
+    drive(90, false, intValue);
+    
+  } else if(cmd == "STR"){
+    
+    drive(intValue, currDir, currSpd);
+  } else if(cmd == "STP"){
+    
+    stop();
+  }
 }
