@@ -52,6 +52,9 @@ void drive(int theta, bool dir, int spd){
   } else if(theta > 155){
     theta = 155;
   }
+  if(spd > 128){
+    spd = 128;
+  }
   currSpd = spd;
   prevAngle = theta;
   double L = 23.5;
@@ -118,6 +121,20 @@ void stop(){
   analogWrite(pinENA34, 0);
 }
 
+void fig8(){
+  stop();
+  delay(1000);
+  drive(140, true, 64);
+  delay(2000);
+  drive(90, true, 64);
+  delay(1000);
+  drive(40, true, 64);
+  delay(2000);
+  drive(90, true, 64);
+  delay(1000);
+  stop();  
+}
+
 void loop()
 {
   if(Serial.available()){
@@ -144,10 +161,26 @@ void loop()
   } else if(cmd == "STR"){
     
     drive(intValue, currDir, currSpd);
-
+    
   } else if(cmd == "STP"){
     
     stop();
+    
+  } else if(cmd == "MAN"){
+    
+    if(intValue == 1){
+      
+    fig8();
+      
+    } else if(intValue == 2){
+      
+      fig8();
+      
+    } else {
+      
+      stop();
+      
+    }
     
   }
 }
