@@ -69,14 +69,14 @@ void drive(int theta, bool dir, int spd){
   //Sending power to the motors
   if(dir == true){
     currDir = dir;
-  	digitalWrite(pinIN1, LOW);
-  	digitalWrite(pinIN2, HIGH);
+  	digitalWrite(pinIN1, HIGH);
+  	digitalWrite(pinIN2, LOW);
   	digitalWrite(pinIN3, HIGH);
   	digitalWrite(pinIN4, LOW);
   } else {
     currDir = dir;
-    digitalWrite(pinIN1, HIGH);
-  	digitalWrite(pinIN2, LOW);
+    digitalWrite(pinIN1, LOW);
+  	digitalWrite(pinIN2, HIGH);
   	digitalWrite(pinIN3, LOW);
   	digitalWrite(pinIN4, HIGH);
   }
@@ -101,6 +101,7 @@ void drive(int theta, bool dir, int spd){
   	analogWrite(pinENA34, vL);
   }
 }
+ 
 
 //function stop()
 //no parameters
@@ -121,18 +122,25 @@ void stop(){
   analogWrite(pinENA34, 0);
 }
 
-void fig8(){
-  stop();
-  delay(1000);
-  drive(140, true, 64);
-  delay(2000);
-  drive(90, true, 64);
-  delay(1000);
-  drive(40, true, 64);
-  delay(2000);
-  drive(90, true, 64);
-  delay(1000);
-  stop();  
+void maneuver(int choice){
+  if(choice == 1){
+    //figure 8
+  	stop();
+  	delay(1000);
+  	drive(140, true, 64);
+  	delay(2000);
+  	drive(90, true, 64);
+  	delay(1000);
+  	drive(40, true, 64);
+  	delay(2000);
+  	drive(90, true, 64);
+  	delay(1000);
+  	stop();
+  } else if(choice == 2){
+    stop();
+  } else {
+    stop();
+  }
 }
 
 void loop()
@@ -168,19 +176,7 @@ void loop()
     
   } else if(cmd == "MAN"){
     
-    if(intValue == 1){
-      
-    fig8();
-      
-    } else if(intValue == 2){
-      
-      fig8();
-      
-    } else {
-      
-      stop();
-      
-    }
+    maneuver(intValue);
     
   }
 }
