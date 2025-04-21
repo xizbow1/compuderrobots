@@ -15,7 +15,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-int fps = 3; // in frames per sec
+int fps = 15; // in frames per sec
 int frameDelay = 1000/(2*fps); // in millisec 
 double maxDistance = 3000.0; // mm
 int rows  = 480;
@@ -37,7 +37,7 @@ if( map2x.empty()) cout << "Empty 2x lookup table"<<endl;
 if( map2y.empty()) cout << "Empty 2y lookup table"<<endl;
 
 //correct any remaining alignment errors
-float offset = 0.0;
+float offset = 14.0;
 float currentRow;
 for(int row = 0; row < rows; row++){
     for(int col = 0; col < cols; col++){

@@ -16,10 +16,10 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
 // See the video I posted on acceleration stereo on the GPU 
 
 
-    const int windowWidth = 15; //must be odd
+    const int windowWidth = 11; //must be odd
     const int halfWindow = (windowWidth-1)/2;
     double baseLine = 60.0;
-    double focalLength = 560.0;
+    double focalLength = 578.0;
     double maxDisparity = 71;
 
     unsigned char leftPixel;
