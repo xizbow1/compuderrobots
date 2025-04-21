@@ -36,6 +36,20 @@ if( map1y.empty()) cout << "Empty 1y lookup table"<<endl;
 if( map2x.empty()) cout << "Empty 2x lookup table"<<endl;
 if( map2y.empty()) cout << "Empty 2y lookup table"<<endl;
 
+//correct any remaining alignment errors
+float offset = 0.0;
+float currentRow;
+for(int row = 0; row < rows; row++){
+    for(int col = 0; col < cols; col++){
+        currentRow = map2y.at<float>(row,col);
+        if(currentRow+offset < 0 || currentRow+offset > rows){
+            map2y.at<float>(row,col) = currentRow;
+        } else {
+            map2y.at<float>(row,col) = currentRow + offset;
+        }
+    }
+}
+
 // GStreamer pipeline for Jetson Nano with IMX219-83 cameras
  string left_cam_pipeline  = "nvarguscamerasrc sensor-id=0 ! video/x-raw(memory:NVMM), width=640, height=480, framerate="+to_string(fps)+
                               "/1 ! nvvidconv flip-method=2 ! video/x-raw, format=GRAY8 !  appsink drop=1";
