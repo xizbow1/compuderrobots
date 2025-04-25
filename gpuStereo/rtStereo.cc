@@ -15,7 +15,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-int fps = 15; // in frames per sec
+int fps = 30; // in frames per sec
 int frameDelay = 1000/(2*fps); // in millisec 
 double maxDistance = 3000.0; // mm
 int rows  = 480;
