@@ -11,7 +11,7 @@ LDLIBS = -I/usr/include/opencv4 -ljpeg -lm -lopencv_core -lopencv_imgproc -lopen
 
 # Source files
 CCSRCS =  rtStereo.cc   
-CUSRCS = stereoKernel.cu stereoDepth.cu 
+CUSRCS = stereoKernel.cu obstacleleKernel.cu stereoObstacle.cu stereoDepth.cu
 
 # Object files (replace .cc with .o)
 CCOBJS = $(CCSRCS:.cc=.o)
