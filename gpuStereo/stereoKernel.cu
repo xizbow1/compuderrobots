@@ -4,45 +4,64 @@
 #include <cuda_runtime.h>
 #include <limits.h>
 
-__global__ void stereoKernel(unsigned char* left, unsigned char* right, unsigned char* depth, double maxDistance, int rows, int cols){
+__global__ void stereoKernel(unsigned char* left, unsigned char* right, 
+                            unsigned char* disparity, int maxDisparity, int rows, int cols){
 
     
 // compute the row and col of the pixel to be processed
 int col = blockIdx.x*blockDim.x + threadIdx.x;
 int row = blockIdx.y*blockDim.y + threadIdx.y;
 
-// put your stereo matching code here
-// This code should only be for one pixel
-// See the video I posted on acceleration stereo on the GPU 
-
-
     const int windowWidth = 3; //must be odd
     const int halfWindow = (windowWidth-1)/2;
-    double baseLine = 60.0;
-    double focalLength = 578.0;
-    double maxDisparity = 71;
-
+    int disparityStep = 2;
+    int windowStep = 2;
+    double contrast;
+    double contrastThreshold = 10;
+    
     unsigned char leftPixel;
     unsigned char rightPixel;
-    int disparity;
+    unsigned char centerPixel;
+    int disp = 0;
     double distance;
     double sumSqDiff;
-    int minSumSqDiff = INT_MAX;
-    int diff;
+    double minSumSqDiff = (double)INT_MAX*(double)INT_MAX;
+    double diff;
+    double intensity, minIntensity, maxIntensity;
 
-    if(row < halfWindow || row > rows-halfWindow || col < halfWindow || col > cols - halfWindow) return;
 
-    //compute sum of squred differecnes each shifted window
+    if(row < halfWindow || row > rows-halfWindow ||
+        col < halfWindow || col > cols - halfWindow) return;
 
-    for(int k=0; k<maxDisparity;k++){
+
+    //compute the contrast for left window
+    // if contrast too low return
+    minIntensity = (double)(left[row*cols+col]);
+    maxIntensity = minIntensity;
+    //compute the sums within the windowsin each image
+    for(int i = -halfWindow; i < halfWindow + 1; i += windowStep){
+        for(int j = -halfWindow; j < halfWindow + 1; j += windowStep){
+            intensity = (double)(left[(row+i) * cols + (col + j)]);
+            if(intensity < minIntensity) minIntensity = intensity;
+            if(intensity > maxIntensity) maxIntensity = intensity;
+        }
+    }
+    //ignore 
+    contrast = maxIntensity = minIntensity;
+    if(contrast < contrastThreshold) return;
+
+    //compute sum of squred differences each shifted window
+
+    for(int k=0; k<maxDisparity;k += disparityStep){
         sumSqDiff=0.0;
-        for(int i = -halfWindow; i<halfWindow+1;i++){
-            for(int j = -halfWindow; j<halfWindow+1;j++){
-
-                    leftPixel = left[(row+i)*cols+(col+j)];
-                    rightPixel = right[(row+i)*cols+(col+j-k)];
-                    diff = leftPixel-rightPixel;
-                    sumSqDiff += diff*diff;
+        for(int i = -halfWindow; i<halfWindow+1;i += windowStep){
+            for(int j = -halfWindow; j<halfWindow+1;j += windowStep){
+                    if(row + i < rows && col + j < cols && 0 <= col + j - k && col + j - k < cols){
+                        leftPixel = left[(row+i)*cols+(col+j)];
+                        rightPixel = right[(row+i)*cols+(col+j-k)];
+                        diff = (double)leftPixel-(double)rightPixel;
+                        sumSqDiff += fabs(diff);
+                    }
             }
         }
 
@@ -50,15 +69,10 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
         //compute min sum square diff
         if(sumSqDiff < minSumSqDiff){
             minSumSqDiff = sumSqDiff;
-            disparity = k;
+            disp = k;
         }
     }
 
-    //if we have a valid disparity, compute the distance and save it
-    if(disparity > 0){
-        distance = baseLine*focalLength/disparity;
-        depth[row*cols+col] = (unsigned char) (255.0*distance/maxDistance);
-    }else {
-        depth[row*cols+col]=255;
-    }
+    disparity[row*cols+col] = (unsigned char) (disp);
+
 }
