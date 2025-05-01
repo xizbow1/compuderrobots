@@ -128,7 +128,8 @@ for(int row = 0; row < rows; row++){
     stereoDepth(&rectifiedLeft, &rectifiedRight, &depthImage, maxDistance, rows, cols);
     // Compute obstacles image using GPU
     stereoObstacles(&depthImage, &obstacleImage, maxDistance, rows, cols);
-/*
+
+
     // Zones are split from left to right 0 - 4
     // On the robot left to right will be reversed
     // The robot's right will be zone 0
@@ -143,14 +144,15 @@ for(int row = 0; row < rows; row++){
     for(int row = 0; row < rows; row++){
         for(int col = 0; col < cols; col++){
             pixel = (int)(obstacleImage.data[row*cols+col]);
-            if(col >= 0 && col < zone0End && pixel > 0) zone0Count++;
-            if(col >= zone0End && col < zone1End && pixel > 0) zone1Count++;
-            if(col >= zone1End && col < zone2End && pixel > 0) zone2Count++;
-            if(col >= zone2End && col < zone3End && pixel > 0) zone3Count++;
-            if(col >= zone3end && col < zone4End && pixel > 0) zone4Count++;
+            if(col >= 0 && col < zone0End && pixel > 0) zone0Count++;           // Far Left Zone
+            if(col >= zone0End && col < zone1End && pixel > 0) zone1Count++;    // Mid Left Zone
+            if(col >= zone1End && col < zone2End && pixel > 0) zone2Count++;    // Middle Zone
+            if(col >= zone2End && col < zone3End && pixel > 0) zone3Count++;    // Mid Right Zone
+            if(col >= zone3end && col < zone4End && pixel > 0) zone4Count++;    // Far Right Zone
         }
     }
 
+    // Determine if zone count is above threshold
     if(zone0Count > obstacleThreshold) zone0Clear = false;
     else zone0Clear = true;
     if(zone1Count > obstacleThreshold) zone1Clear = false;
@@ -188,9 +190,10 @@ for(int row = 0; row < rows; row++){
         moveCmd = 'FWD080\n';
     }
 
+    // Write to serial port the driving commands
     bytesWritten = serialPortWrite(moveCmd,portID);
     bytesWritten = serialPortWrite(strCmd,portID);
-*/
+
 
     // Drawing obstacle zones border lines 
     // Zone 0 far left 
@@ -204,23 +207,23 @@ for(int row = 0; row < rows; row++){
     // Zone 4 far right
     // End of zone 4 is the edge of the image so no border line is necessary
 
+    //Smoothing depth image
+    Mat medianDepth, filteredDepth;
+    medianBlur(depthImage, medianDepth, 3);
+    GaussianBlur(medianDepth, filteredDepth, Size(5,5), 0);
+
     // Display depth map
-    imshow("Depth",depthImage);
+    imshow("Depth", filteredDepth);
     // Display obstacle map
     imshow("Obstacles",obstacleImage);
     // Dispaly rectified images 
     //hconcat(rectifiedLeft, rectifiedRight,both);
     //imshow("Left and Right",both);
   
-    // pause
+    // Pause
     waitKey(frameDelay) ;
 
     }
-
-    // Release resources
-    capL.release();
-    capR.release();
-    destroyAllWindows();
 
     // Close serial port
     if(serialPortClose(portID)< 0){
@@ -229,6 +232,11 @@ for(int row = 0; row < rows; row++){
     } else{
         printf("Serial port closed \n");
     }
+   
+    // Release resources
+    capL.release();
+    capR.release();
+    destroyAllWindows();
 
     return 0;
 }

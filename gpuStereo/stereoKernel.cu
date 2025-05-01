@@ -50,7 +50,7 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     }
 
     // Ignore any contrast below the threshold
-    contrast = maxIntensity = minIntensity;
+    contrast = maxIntensity - minIntensity;
     if(contrast < contrastThreshold) return;
 
     // Compute sum of squred differences each shifted window
