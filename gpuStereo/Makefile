@@ -10,7 +10,7 @@ CUFLAGS = -I/usr/local/cuda/bin -I/usr/include/opencv4 -w
 LDLIBS = -I/usr/include/opencv4 -ljpeg -lm -lopencv_core -lopencv_imgproc -lopencv_calib3d -lopencv_highgui -lopencv_imgcodecs -lopencv_calib3d -lopencv_videoio -llapacke -llapack -lblas -lcuda
 
 # Source files
-CCSRCS =  rtStereo.cc   
+CCSRCS =  rtStereo.cc serialUtils.cc
 CUSRCS = stereoKernel.cu obstacleleKernel.cu stereoObstacle.cu stereoDepth.cu
 
 # Object files (replace .cc with .o)
