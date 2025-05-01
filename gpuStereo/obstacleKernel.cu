@@ -11,11 +11,15 @@ using namespace cv::cuda;
 // The actual CUDA kernel for obstacle detection
 __global__ void obstacleKernel(const unsigned char* disparity,
                                       unsigned char* obstacles,
+                                      //double maxX, double maxZ,
                                       double maxDistance,
                                       int rows, int cols)
 {
     int col = blockIdx.x * blockDim.x + threadIdx.x;
     int row = blockIdx.y * blockDim.y + threadIdx.y;
+
+    int halfWindow = 6;
+    double minY = 100.0;
 
     //left camera parameters
     double baseline = 60.0;
@@ -26,11 +30,13 @@ __global__ void obstacleKernel(const unsigned char* disparity,
     unsigned char pixel;
     double disparityChange = 0.0;
 
+
     pixel = disparity[rows * cols + col];
 
     double z = (double) pixel;
 
     double distance;
+
     if(z > 0) distance = (baseline * fx) / z;
     else distance = 0.0;
 
@@ -39,26 +45,33 @@ __global__ void obstacleKernel(const unsigned char* disparity,
     } else {
         obstacles[row * cols + col] = (unsigned char) 0;
     }
-/*
-        //obstacle map resolution mm
-    double maxX = 2000;
 
+/*
     double disp = (double)disparity[row*col + col];
 
     //compute z the distance from camera
     double z = baseline*fx/disp;
+    double z1 = baseline*fx/disp1;
+    double z2 = baseline*fx/disp2;
 
     //compute x the side to side distnace. Neg to left
-    double x = z * (col - ox) / fx;
+    double x = z * (ox - (double)col) / fx;
 
-    //compute obstacle location on the map
-    int obstacleCol, obstacleRow;
-    if(z>maxDistance || fabs(x)>maxX) return;
+    // compute y the distance above the ground. y pos up
+    double y = cameraHeight + z*((double)row - oy)/fy;
+    double y1 = cameraHeight + z1*((double)(row - 1) - oy)/fy;
+    double y2 = cameraHeight + z2*((double)(row + 1) - oy)/fy;
 
-    obstacleCol = (int)(cols*z/maxDistance);
-    obstacleRow = (int)(rows*(maxX+x)/(2*maxX));
+    //check if obstacle is within detection zone
+    if(z > maxZ || fabs(x) > maxX){
+        obstacles[row*cols+col] = 0;
+        return;
+    } 
 
+    //
+
+    int obstacleCol = (int)(cols*z/maxDistance);
+    int obstacleRow = (int)(rows*(maxX+x)/(2*maxX));
 */
-
-
+    
 }

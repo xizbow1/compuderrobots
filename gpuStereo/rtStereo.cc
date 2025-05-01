@@ -9,18 +9,49 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "stereoDepth.h"
+#include "stereoObstacles.h"
+#include "serialUtils.h"
 
 using namespace cv;
 using namespace std;
 
 int main(int argc, char** argv) {
 
+// Dispaly Parameters
 int fps = 60; // in frames per sec
 int frameDelay = 1000/(2*fps); // in millisec 
 double maxDistance = 3000.0; // mm
 int rows  = 480;
 int cols  = 640;
 Mat depthImage = Mat::zeros(rows,cols, CV_8UC1);
+
+// Serial parameters
+const int cmdLength = 7;
+char cmd[cmdLength];
+int portID;
+int bytesWritten;
+const char* strCmd;
+const char* moveCmd;
+
+portID = serialPortOpen();
+if(portID<0){
+    printf("Error opening serial port \n");
+    exit(0);
+}
+
+// Obstacle Parameters
+Mat obstacleImage = Mat::zeros(rows,cols, CV_8UC1);
+int zone0End = cols / 5;
+int zone1End = 2*(cols/5);
+int zone2End = 3*(cols/5);
+int zone3End = 4*(cols/5);
+int zone4End = cols;
+int obstacleThreshold = 5000;
+bool zone0Clear = true;
+bool zone1Clear = true;
+bool zone2Clear = true;
+bool zone3Clear = true;
+bool zone4Clear = true;
 
 //Read rectification lookup tables
 Mat map1x,map1y,map2x,map2y;
@@ -87,26 +118,108 @@ for(int row = 0; row < rows; row++){
             break;
         }
 
+    // Apply rectification
+    Mat rectifiedLeft, rectifiedRight, both;
+    remap(leftFrame, rectifiedLeft, map1x, map1y, INTER_LINEAR);
+    remap(rightFrame, rectifiedRight, map2x, map2y, INTER_LINEAR);
 
 
-      // Apply rectification
-      Mat rectifiedLeft, rectifiedRight, both;
-      remap(leftFrame, rectifiedLeft, map1x, map1y, INTER_LINEAR);
-      remap(rightFrame, rectifiedRight, map2x, map2y, INTER_LINEAR);
+    // Compute depth image using GPU
+    stereoDepth(&rectifiedLeft, &rectifiedRight, &depthImage, maxDistance, rows, cols);
+    // Compute obstacles image using GPU
+    stereoObstacles(&depthImage, &obstacleImage, maxDistance, rows, cols);
+
+    // Zones are split from left to right 0 - 4
+    // On the robot left to right will be reversed
+    // The robot's right will be zone 0
+    // The robot's left will be zone 4
+    int zone0Count = 1;
+    int zone1Count = 1;
+    int zone2Count = 1;
+    int zone3Count = 1;
+    int zone4Count = 1;
+    int pixel;
+
+    for(int row = 0; row < rows; row++){
+        for(int col = 0; col < cols; col++){
+            pixel = (int)(obstacleImage.data[row*cols+col]);
+            if(col >= 0 && col < zone0End && pixel > 0) zone0Count++;
+            if(col >= zone0End && col < zone1End && pixel > 0) zone1Count++;
+            if(col >= zone1End && col < zone2End && pixel > 0) zone2Count++;
+            if(col >= zone2End && col < zone3End && pixel > 0) zone3Count++;
+            if(col >= zone3end && col < zone4End && pixel > 0) zone4Count++;
+        }
+    }
+
+    if(zone0Count > obstacleThreshold) zone0Clear = false;
+    else zone0Clear = true;
+    if(zone1Count > obstacleThreshold) zone1Clear = false;
+    else zone1Clear = true;
+    if(zone2Count > obstacleThreshold) zone2Clear = false;
+    else zone2Clear = true;
+    if(zone3Count > obstacleThreshold) zone3Clear = false;
+    else zone3Clear = true;
+    if(zone4Count > obstacleThreshold) zone4Clear = false;
+    else zone4Clear = true;
+
+    // Check if any zones have obstacles
+    if (!zone0Clear) {
+    // Zone 0 (far left) has obstacles
+        strCmd = 'STR100\n';
+        moveCmd = 'FWD080\n';
+    }
+
+    if (!zone1Clear) {
+    // Zone 1 (mid left) has obstacles
+        strCmd = 'STR160\n';
+        moveCmd = 'FWD080\n';
+    }
+
+    if (!zone2Clear) {
+    // Zone 2 (middle) has obstacles
+        strCmd = 'STR090\n';
+        moveCmd = 'FWD080\n';
+    }
+
+    if (!zone3Clear) {
+    // Zone 3 (mid right) has obstacles
+        strCmd = 'STR030\n';
+        moveCmd = 'FWD080\n';
+    }
+
+    if (!zone4Clear) {
+    // Zone 4 (far right) has obstacles
+        strCmd = 'STR080\n';
+        moveCmd = 'FWD080\n';
+    }
+
+    bytesWritten = serialPortWrite(moveCmd,portID);
+    bytesWritten = serialPortWrite(strCmd,portID);
 
 
-      // Compute depth image using GPU
-      stereoDepth(&rectifiedLeft, &rectifiedRight, &depthImage, maxDistance, rows, cols);
+    // Drawing obstacle zones border lines 
+    // Zone 0 far left 
+    line(obstacleImage, Point(zone0End, 0), Point(zone0End, rows-1), Scalar(255), 1);
+    // Zone 1 mid left
+    line(obstacleImage, Point(zone1end, 0), Point(zone1End, rows-1), Scalar(255), 1);
+    // Zone 2 middle
+    line(obstacleImage, Point(zone2End, 0), Point(zone2End, rows-1), Scalar(255), 1);
+    // Zone 3 mid right
+    line(obstacleImage, Point(zone3End, 0), Point(zone3End, rows-1), Scalar(255), 1);
+    // Zone 4 far right
+    // End of zone 4 is the edge of the image so no border line is necessary
 
-
-      // dispaly depth map
-      imshow("Depth",depthImage);
-      hconcat(rectifiedLeft, rectifiedRight,both);
-      imshow("Left and Right",both);
+    // Display depth map
+    imshow("Depth",depthImage);
+    // Display obstacle map
+    imshow("Obstacles",obstacleImage);
+    // Dispaly rectified images 
+    //hconcat(rectifiedLeft, rectifiedRight,both);
+    //imshow("Left and Right",both);
   
 
-      // pause
-      waitKey(frameDelay) ;
+    // pause
+    waitKey(frameDelay) ;
 
 
     }
@@ -116,7 +229,16 @@ for(int row = 0; row < rows; row++){
     capR.release();
     destroyAllWindows();
 
+    // Close serial port
+    if(serialPortClose(portID)< 0){
+        printf("Could not close serial port \n");
+        exit(0);
+    } else{
+        printf("Serial port closed \n");
+    }
+
     return 0;
 }
+
 
 

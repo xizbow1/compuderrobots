@@ -5,7 +5,8 @@
 #include <limits.h>
 
 __global__ void stereoKernel(unsigned char* left, unsigned char* right, 
-                            unsigned char* disparity, int maxDisparity, int rows, int cols){
+                            unsigned char* disparity, int maxDisparity,
+                            int rows, int cols){
 
     
 // compute the row and col of the pixel to be processed
@@ -17,7 +18,7 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     int disparityStep = 2;
     int windowStep = 2;
     double contrast;
-    double contrastThreshold = 15;
+    double contrastThreshold = 20;
     
     unsigned char leftPixel;
     unsigned char rightPixel;
@@ -34,11 +35,12 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
         col < halfWindow || col > cols - halfWindow) return;
 
 
-    //compute the contrast for left window
+    // Compute the contrast for left window
     // if contrast too low return
     minIntensity = (double)(left[row*cols+col]);
     maxIntensity = minIntensity;
-    //compute the sums within the windowsin each image
+
+    // Compute the sums within the windowsin each image
     for(int i = -halfWindow; i < halfWindow + 1; i += windowStep){
         for(int j = -halfWindow; j < halfWindow + 1; j += windowStep){
             intensity = (double)(left[(row+i) * cols + (col + j)]);
@@ -46,12 +48,12 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
             if(intensity > maxIntensity) maxIntensity = intensity;
         }
     }
-    //ignore 
+
+    // Ignore any contrast below the threshold
     contrast = maxIntensity = minIntensity;
     if(contrast < contrastThreshold) return;
 
-    //compute sum of squred differences each shifted window
-
+    // Compute sum of squred differences each shifted window
     for(int k=0; k<maxDisparity;k += disparityStep){
         sumSqDiff=0.0;
         for(int i = -halfWindow; i<halfWindow+1;i += windowStep){
