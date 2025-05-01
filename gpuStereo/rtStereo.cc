@@ -128,7 +128,7 @@ for(int row = 0; row < rows; row++){
     stereoDepth(&rectifiedLeft, &rectifiedRight, &depthImage, maxDistance, rows, cols);
     // Compute obstacles image using GPU
     stereoObstacles(&depthImage, &obstacleImage, maxDistance, rows, cols);
-
+/*
     // Zones are split from left to right 0 - 4
     // On the robot left to right will be reversed
     // The robot's right will be zone 0
@@ -168,25 +168,20 @@ for(int row = 0; row < rows; row++){
         strCmd = 'STR100\n';
         moveCmd = 'FWD080\n';
     }
-
     if (!zone1Clear) {
     // Zone 1 (mid left) has obstacles
         strCmd = 'STR160\n';
         moveCmd = 'FWD080\n';
     }
-
     if (!zone2Clear) {
     // Zone 2 (middle) has obstacles
-        strCmd = 'STR090\n';
-        moveCmd = 'FWD080\n';
+        moveCmd = 'STP\n';
     }
-
     if (!zone3Clear) {
     // Zone 3 (mid right) has obstacles
         strCmd = 'STR030\n';
         moveCmd = 'FWD080\n';
     }
-
     if (!zone4Clear) {
     // Zone 4 (far right) has obstacles
         strCmd = 'STR080\n';
@@ -195,7 +190,7 @@ for(int row = 0; row < rows; row++){
 
     bytesWritten = serialPortWrite(moveCmd,portID);
     bytesWritten = serialPortWrite(strCmd,portID);
-
+*/
 
     // Drawing obstacle zones border lines 
     // Zone 0 far left 
@@ -217,10 +212,8 @@ for(int row = 0; row < rows; row++){
     //hconcat(rectifiedLeft, rectifiedRight,both);
     //imshow("Left and Right",both);
   
-
     // pause
     waitKey(frameDelay) ;
-
 
     }
 
