@@ -27,7 +27,7 @@ void stereoObstacles(cv::Mat* depth, cv::Mat* obstacles, double maxDistance, int
 
     // Copy images from host (CPU RAM) to device (GPU)
     cudaMemcpy(d_depth, depth->data, cols * rows * sizeof(uchar), cudaMemcpyHostToDevice);
-    cudaMemcpy(d_obstacles, obstacles->data,cols * rows * sizeof(uchar), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_obstacles, obstacles->data, cols * rows * sizeof(uchar), cudaMemcpyHostToDevice);
 
     // Launch kernel
     obstacleKernel<<<grid, block>>>(d_depth, d_obstacles, maxDistance, rows, cols);

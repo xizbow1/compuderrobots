@@ -30,7 +30,6 @@ __global__ void obstacleKernel(const unsigned char* disparity,
     unsigned char pixel;
     double disparityChange = 0.0;
 
-
     pixel = disparity[row * cols + col];
 
     double z = (double) pixel;
