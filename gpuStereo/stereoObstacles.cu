@@ -30,14 +30,13 @@ void stereoObstacles(Mat* depth, Mat* obstacles, double maxDistance, int rows, i
     cudaMemcpy(d_obstacles, obstacles->data,cols * rows * sizeof(uchar), cudaMemcpyHostToDevice);
 
     // Launch kernel
-    obstacleKernel<<<grid, block>>>(d_depth, d_obstalces, maxDistance, rows, cols);
+    obstacleKernel<<<grid, block>>>(d_depth, d_obstacles, maxDistance, rows, cols);
     cudaDeviceSynchronize();
 
     // Copy back the disparity map
     cudaMemcpy(obstacles->data, d_obstacles, cols * rows * sizeof(uchar), cudaMemcpyDeviceToHost);
 
     // Free device memory
-    cudaFree(d_left);
-    cudaFree(d_right);
+    cudaFree(d_obstacles);
     cudaFree(d_depth);
 }

@@ -18,8 +18,6 @@ __global__ void obstacleKernel(const unsigned char* disparity,
     int col = blockIdx.x * blockDim.x + threadIdx.x;
     int row = blockIdx.y * blockDim.y + threadIdx.y;
 
-    if(row >= rows || col >= cols) return;
-
     int halfWindow = 6;
     double minY = 100.0;
 
@@ -49,7 +47,7 @@ __global__ void obstacleKernel(const unsigned char* disparity,
     }
 
 /*
-    double disp = (double)disparity[row*col + col];
+    double disp = (double)disparity[row*cols + col];
 
     //compute z the distance from camera
     double z = baseline*fx/disp;

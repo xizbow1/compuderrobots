@@ -149,7 +149,7 @@ for(int row = 0; row < rows; row++){
             if(col >= zone0End && col < zone1End && pixel > 0) zone1Count++;    // Mid Left Zone
             if(col >= zone1End && col < zone2End && pixel > 0) zone2Count++;    // Middle Zone
             if(col >= zone2End && col < zone3End && pixel > 0) zone3Count++;    // Mid Right Zone
-            if(col >= zone3Ed && col < zone4End && pixel > 0) zone4Count++;    // Far Right Zone
+            if(col >= zone3End && col < zone4End && pixel > 0) zone4Count++;    // Far Right Zone
         }
     }
     /*
@@ -184,27 +184,27 @@ for(int row = 0; row < rows; row++){
     // Check if any zones have obstacles
     if (!zone0Clear) {
     // Zone 0 (far left) has obstacles
-        strCmd = 'STR100\n';
-        moveCmd = 'FWD080\n';
+        strCmd = "STR100\n";
+        moveCmd = "FWD080\n";
     }
     if (!zone1Clear) {
     // Zone 1 (mid left) has obstacles
-        strCmd = 'STR160\n';
-        moveCmd = 'FWD080\n';
+        strCmd = "STR160\n";
+        moveCmd = "FWD080\n";
     }
     if (!zone2Clear) {
     // Zone 2 (middle) has obstacles
-        moveCmd = 'STP\n';
+        moveCmd = "STP\n";
     }
     if (!zone3Clear) {
     // Zone 3 (mid right) has obstacles
-        strCmd = 'STR030\n';
-        moveCmd = 'FWD080\n';
+        strCmd = "STR030\n";
+        moveCmd = "FWD080\n";
     }
     if (!zone4Clear) {
     // Zone 4 (far right) has obstacles
-        strCmd = 'STR080\n';
-        moveCmd = 'FWD080\n';
+        strCmd = "STR080\n";
+        moveCmd = "FWD080\n";
     }
 
     // Write to serial port the driving commands
