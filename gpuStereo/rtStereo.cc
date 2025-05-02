@@ -224,14 +224,15 @@ for(int row = 0; row < rows; row++){
     // End of zone 4 is the edge of the image so no border line is necessary
 
     //Smoothing depth image
-    Mat medianDepth, filteredDepth;
-    medianBlur(depthImage, medianDepth, 3);
+    Mat medianDepth, filteredDepth, medianObstacles;
+    medianBlur(depthImage, medianDepth, 15);
+    medianBlur(depthImage, medianObstacles, 15);
     GaussianBlur(medianDepth, filteredDepth, Size(5,5), 0);
 
     // Display depth map
     imshow("Depth", filteredDepth);
     // Display obstacle map
-    imshow("Obstacles",obstacleImage);
+    imshow("Obstacles",medianObstacles);
     // Dispaly rectified images 
     //hconcat(rectifiedLeft, rectifiedRight,both);
     //imshow("Left and Right",both);
