@@ -14,7 +14,7 @@
 using namespace cv;
 using namespace std;
 
-void stereoObstacles(cv::Mat *depth, cv::Mat *obstacles, double maxDistance, int rows, int cols) {
+void stereoObstacles(Mat *depth, Mat *obstacles, double maxDistance, int rows, int cols) {
 
     int BLOCK_SIZE = 16; // use square blocks
     dim3 block(BLOCK_SIZE, BLOCK_SIZE);

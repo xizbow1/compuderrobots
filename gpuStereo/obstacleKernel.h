@@ -4,6 +4,6 @@
 #include <opencv2/core.hpp>
 
 
-void obstacleKernel(cv::Mat* depth, cv::Mat* obstacles, double maxDistance, int rows, int cols);
+void obstacleKernel(Mat* depth, Mat* obstacles, double maxDistance, int rows, int cols);
 
  #endif

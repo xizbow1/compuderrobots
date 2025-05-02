@@ -9,8 +9,8 @@ using namespace cv;
 using namespace cv::cuda;
 
 // The actual CUDA kernel for obstacle detection
-__global__ void obstacleKernel(const cv::Mat* disparity,
-                                      cv::Mat* obstacles,
+__global__ void obstacleKernel(const unsigned char* disparity,
+                                      unsigned char* obstacles,
                                       double maxDistance,
                                       int rows, int cols)
 {
