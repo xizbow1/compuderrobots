@@ -17,13 +17,13 @@ using namespace cv;
 using namespace std;
 
 int portID;
+volatile bool exitRequested = false;
 
 void intHandler(int sig){
     serialPortWrite("STP\n",portID);
-    exit(0);
+    exitRequested = true; // Set flag instead of exiting immediately
+    printf("\nStopping robot and exiting...\n");
 }
-
-
 
 int main(int argc, char** argv) {
 
@@ -113,7 +113,7 @@ for(int row = 0; row < rows; row++){
     signal(SIGINT, intHandler);
 
     // Real-time loop for capturing frames
-    while (true) {
+    while (!exitRequested) {
 
         // Capture frames from both cameras
         capL >> leftFrame;
@@ -249,12 +249,17 @@ for(int row = 0; row < rows; row++){
     //imshow("Left and Right",both);
   
     // Pause
-    waitKey(frameDelay) ;
+    waitKey(frameDelay);
 
-
-
+        // Check if exit was requested during waitKey
+        if (exitRequested) {
+            break;
+        }
     }
 
+    // Send a final stop command to ensure robot stops
+    serialPortWrite("STP\n", portID);
+    
     // Close serial port
     if(serialPortClose(portID)< 0){
         printf("Could not close serial port \n");
