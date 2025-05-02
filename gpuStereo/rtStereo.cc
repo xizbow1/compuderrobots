@@ -47,11 +47,6 @@ int zone2End = 4*(cols/6);
 int zone3End = 5*(cols/6);
 int zone4End = cols;
 int obstacleThreshold = 5000;
-bool zone0Clear = true;
-bool zone1Clear = true;
-bool zone2Clear = true;
-bool zone3Clear = true;
-bool zone4Clear = true;
 
 //Read rectification lookup tables
 Mat map1x,map1y,map2x,map2y;
@@ -134,6 +129,11 @@ for(int row = 0; row < rows; row++){
     // On the robot left to right will be reversed
     // The robot's right will be zone 0
     // The robot's left will be zone 4
+    bool zone0Clear = true;
+    bool zone1Clear = true;
+    bool zone2Clear = true;
+    bool zone3Clear = true;
+    bool zone4Clear = true;
     int zone0Count = 1;
     int zone1Count = 1;
     int zone2Count = 1;
@@ -169,7 +169,6 @@ for(int row = 0; row < rows; row++){
     zone4Count = countNonZero(roi_zone4);
     */
 
-    /*
     // Determine if zone count is above threshold
     if(zone0Count > obstacleThreshold) zone0Clear = false;
     else zone0Clear = true;
@@ -211,7 +210,6 @@ for(int row = 0; row < rows; row++){
     // Write to serial port the driving commands
     bytesWritten = serialPortWrite(moveCmd,portID);
     bytesWritten = serialPortWrite(strCmd,portID);
-    */
 
     // Drawing obstacle zones border lines 
     // Zone 0 far left 
