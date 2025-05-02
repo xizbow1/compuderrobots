@@ -11,7 +11,6 @@ using namespace cv::cuda;
 // The actual CUDA kernel for obstacle detection
 __global__ void obstacleKernel(const unsigned char* disparity,
                                       unsigned char* obstacles,
-                                      //double maxX, double maxZ,
                                       double maxDistance,
                                       int rows, int cols)
 {

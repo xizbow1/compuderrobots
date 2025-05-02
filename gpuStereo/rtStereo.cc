@@ -23,7 +23,7 @@ int frameDelay = 1000/(2*fps); // in millisec
 double maxDistance = 3000.0; // mm
 int rows  = 480;
 int cols  = 640;
-Mat depthImage = Mat::zeros(rows,cols, CV_8UC1);
+cv::Mat depthImage = Mat::zeros(rows,cols, CV_8UC1);
 
 // Serial parameters
 const int cmdLength = 7;
@@ -40,7 +40,7 @@ if(portID<0){
 }
 
 // Obstacle Parameters
-Mat obstacleImage = Mat::zeros(rows,cols, CV_8UC1);
+cv::Mat obstacleImage = Mat::zeros(rows,cols, CV_8UC1);
 int zone0End = cols / 6;
 int zone1End = 2*(cols/6);
 int zone2End = 4*(cols/6);
