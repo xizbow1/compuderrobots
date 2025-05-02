@@ -7,6 +7,7 @@
 #include <opencv2/highgui.hpp>
 #include <vector>
 #include <stdio.h>
+#include <signal.h>
 #include <stdlib.h>
 #include "stereoDepth.h"
 #include "stereoObstacles.h"
@@ -14,6 +15,15 @@
 
 using namespace cv;
 using namespace std;
+
+int portID;
+
+void intHandler(int sig){
+    serialPortWrite("STP\n",portID);
+    exit(0);
+}
+
+
 
 int main(int argc, char** argv) {
 
@@ -28,7 +38,6 @@ Mat depthImage = Mat::zeros(rows,cols, CV_8UC1);
 // Serial parameters
 const int cmdLength = 7;
 char cmd[cmdLength];
-int portID;
 int bytesWritten;
 const char* strCmd;
 const char* moveCmd;
@@ -101,6 +110,8 @@ for(int row = 0; row < rows; row++){
     cout << " format \n" << capL.get(CAP_PROP_FORMAT)<<endl;
     cout << " fps \n" << capL.get(CAP_PROP_FPS)<<endl;
     
+    signal(SIGINT, intHandler);
+
     // Real-time loop for capturing frames
     while (true) {
 
@@ -240,6 +251,8 @@ for(int row = 0; row < rows; row++){
     // Pause
     waitKey(frameDelay) ;
 
+
+
     }
 
     // Close serial port
@@ -257,6 +270,3 @@ for(int row = 0; row < rows; row++){
 
     return 0;
 }
-
-
-
