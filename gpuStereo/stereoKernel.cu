@@ -4,7 +4,7 @@
 #include <cuda_runtime.h>
 #include <limits.h>
 
-__global__void stereoKernel(unsigned char* left, unsigned char* right, 
+__global__ void stereoKernel(unsigned char* left, unsigned char* right, 
                             unsigned char* disparity, int maxDisparity,
                             int rows, int cols){
 
