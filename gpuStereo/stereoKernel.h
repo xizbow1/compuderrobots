@@ -1,5 +1,4 @@
-#ifndef STEREO_KERNEL_H
-#define STEREO_KERNEL_H
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,4 +9,4 @@
  __global__ void stereoKernel(unsigned char* left, unsigned char* right,
                               unsigned char* depth, double maxDistance, 
                               int rows, int cols);
-#endif
+

@@ -1,9 +1,12 @@
-#ifndef OBSTACLE_KERNEL_H
-#define OBSTACLE_Kernel_H
+#include <opencv2/opencv.hpp>
+#include <opencv2/calib3d.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui.hpp>
+#include <vector>
+ 
+ using namespace cv;
+ using namespace std;
 
-#include <opencv2/core.hpp>
 
+ __global__ void obstacleKernel(Mat* depth, Mat* obstacles, double maxDistance, int rows, int cols);
 
-void obstacleKernel(Mat* depth, Mat* obstacles, double maxDistance, int rows, int cols);
-
- #endif
