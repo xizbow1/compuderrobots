@@ -18,6 +18,8 @@ __global__ void obstacleKernel(const unsigned char* disparity,
     int col = blockIdx.x * blockDim.x + threadIdx.x;
     int row = blockIdx.y * blockDim.y + threadIdx.y;
 
+    if(row >= rows || col >= cols) return;
+
     int halfWindow = 6;
     double minY = 100.0;
 
@@ -31,7 +33,7 @@ __global__ void obstacleKernel(const unsigned char* disparity,
     double disparityChange = 0.0;
 
 
-    pixel = disparity[rows * cols + col];
+    pixel = disparity[row * cols + col];
 
     double z = (double) pixel;
 

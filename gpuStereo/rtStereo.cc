@@ -41,10 +41,10 @@ if(portID<0){
 
 // Obstacle Parameters
 Mat obstacleImage = Mat::zeros(rows,cols, CV_8UC1);
-int zone0End = cols / 5;
-int zone1End = 2*(cols/5);
-int zone2End = 3*(cols/5);
-int zone3End = 4*(cols/5);
+int zone0End = cols / 6;
+int zone1End = 2*(cols/6);
+int zone2End = 4*(cols/6);
+int zone3End = 5*(cols/6);
 int zone4End = cols;
 int obstacleThreshold = 5000;
 bool zone0Clear = true;
@@ -140,17 +140,34 @@ for(int row = 0; row < rows; row++){
     int zone3Count = 1;
     int zone4Count = 1;
     int pixel;
+    int startRow = rows * 1/3;
 
-    for(int row = 0; row < rows; row++){
+    for(int row = startRow; row < rows; row++){
         for(int col = 0; col < cols; col++){
             pixel = (int)(obstacleImage.data[row*cols+col]);
             if(col >= 0 && col < zone0End && pixel > 0) zone0Count++;           // Far Left Zone
             if(col >= zone0End && col < zone1End && pixel > 0) zone1Count++;    // Mid Left Zone
             if(col >= zone1End && col < zone2End && pixel > 0) zone2Count++;    // Middle Zone
             if(col >= zone2End && col < zone3End && pixel > 0) zone3Count++;    // Mid Right Zone
-            if(col >= zone3end && col < zone4End && pixel > 0) zone4Count++;    // Far Right Zone
+            if(col >= zone3Ed && col < zone4End && pixel > 0) zone4Count++;    // Far Right Zone
         }
     }
+    /*
+    Mat roi_zone0 = obstacleImage(Rect(0,0, zone0End, rows));
+    zone0Count = countNonZero(roi_zone0);
+
+    Mat roi_zone1 = obstacleImage(Rect(0,0, zone1End, rows));
+    zone1Count = countNonZero(roi_zone1);
+
+    Mat roi_zone2 = obstacleImage(Rect(0,0, zone2End, rows));
+    zone2Count = countNonZero(roi_zone2);
+    
+    Mat roi_zone3 = obstacleImage(Rect(0,0, zone3End, rows));
+    zone3Count = countNonZero(roi_zone3);
+
+    Mat roi_zone4 = obstacleImage(Rect(0,0, zone4End, rows));
+    zone4Count = countNonZero(roi_zone4);
+    */
 
     // Determine if zone count is above threshold
     if(zone0Count > obstacleThreshold) zone0Clear = false;
@@ -199,7 +216,7 @@ for(int row = 0; row < rows; row++){
     // Zone 0 far left 
     line(obstacleImage, Point(zone0End, 0), Point(zone0End, rows-1), Scalar(255), 1);
     // Zone 1 mid left
-    line(obstacleImage, Point(zone1end, 0), Point(zone1End, rows-1), Scalar(255), 1);
+    line(obstacleImage, Point(zone1End, 0), Point(zone1End, rows-1), Scalar(255), 1);
     // Zone 2 middle
     line(obstacleImage, Point(zone2End, 0), Point(zone2End, rows-1), Scalar(255), 1);
     // Zone 3 mid right
