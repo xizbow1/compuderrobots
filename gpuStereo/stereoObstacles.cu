@@ -11,8 +11,6 @@
 #include <cuda_runtime.h>
 #include "obstacleKernel.h"
 
-using namespace cv;
-using namespace std;
 
 void stereoObstacles(Mat *depth, Mat *obstacles, double maxDistance, int rows, int cols) {
 

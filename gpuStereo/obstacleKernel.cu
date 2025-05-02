@@ -5,9 +5,6 @@
 #include <opencv2/core.hpp>
 #include "stereoObstacles.h"
 
-using namespace cv;
-using namespace std;
-
 // The actual CUDA kernel for obstacle detection
 __global__ void obstacleKernel(const unsigned char* disparity,
                                       unsigned char* obstacles,

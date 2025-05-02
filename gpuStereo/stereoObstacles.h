@@ -5,9 +5,6 @@
 #include <opencv2/highgui.hpp>
 #include <vector>
 
-using namespace cv;
-using namespace std;
-
 // Function declaration for the stereo obstacles detector
 void stereoObstacles(Mat* depth, Mat* obstacles, double maxDistance, int rows, int cols);
 

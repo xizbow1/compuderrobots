@@ -169,6 +169,7 @@ for(int row = 0; row < rows; row++){
     zone4Count = countNonZero(roi_zone4);
     */
 
+    /*
     // Determine if zone count is above threshold
     if(zone0Count > obstacleThreshold) zone0Clear = false;
     else zone0Clear = true;
@@ -210,7 +211,7 @@ for(int row = 0; row < rows; row++){
     // Write to serial port the driving commands
     bytesWritten = serialPortWrite(moveCmd,portID);
     bytesWritten = serialPortWrite(strCmd,portID);
-
+    */
 
     // Drawing obstacle zones border lines 
     // Zone 0 far left 
