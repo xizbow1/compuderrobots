@@ -4,8 +4,8 @@
 #include <opencv2/highgui.hpp>
 #include <vector>
  
- using namespace cv;
- using namespace std;
+using namespace cv;
+using namespace std;
  
 void stereoDepth(Mat* left, Mat* right, Mat* depth, double maxDistance, int rows, int cols); 
 
