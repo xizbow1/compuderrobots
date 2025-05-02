@@ -7,5 +7,5 @@
  using namespace cv;
  using namespace std;
 
- __global__ void obstacleKernel(const unsigned char* depth, unsigned char* obstacles, double maxDistance, int rows, int cols);
+ __global__void obstacleKernel(const unsigned char* depth, unsigned char* obstacles, double maxDistance, int rows, int cols);
 

@@ -6,7 +6,7 @@
 #include "stereoObstacles.h"
 
 // The actual CUDA kernel for obstacle detection
-__global__ void obstacleKernel(const unsigned char* disparity,
+__global__void obstacleKernel(const unsigned char* disparity,
                                       unsigned char* obstacles,
                                       double maxDistance,
                                       int rows, int cols)

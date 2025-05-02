@@ -7,7 +7,7 @@
 using namespace cv;
 using namespace std;
 
-__global__ void stereoKernel(unsigned char* left, unsigned char* right,
+__global__void stereoKernel(unsigned char* left, unsigned char* right,
                               unsigned char* depth, double maxDistance, 
                               int rows, int cols);
 
