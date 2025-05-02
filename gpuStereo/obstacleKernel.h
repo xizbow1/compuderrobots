@@ -4,7 +4,8 @@
 #include <opencv2/highgui.hpp>
 #include <vector>
  
-
+ using namespace cv;
+ using namespace std;
 
  __global__ void obstacleKernel(Mat* depth, Mat* obstacles, double maxDistance, int rows, int cols);
 
