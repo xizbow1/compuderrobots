@@ -46,7 +46,7 @@ int zone1End = 2*(cols/6);
 int zone2End = 4*(cols/6);
 int zone3End = 5*(cols/6);
 int zone4End = cols;
-int obstacleThreshold = 5000;
+int obstacleThreshold = 2500;
 
 //Read rectification lookup tables
 Mat map1x,map1y,map2x,map2y;
@@ -182,30 +182,30 @@ for(int row = 0; row < rows; row++){
     else zone4Clear = true;
 
     // Check if any zones have obstacles
-    if (!zone0Clear) {
+    if (!zone0Clear ) {
     // Zone 0 (far left) has obstacles
         strCmd = "STR100\n";
         moveCmd = "FWD080\n";
-    }
-    if (!zone1Clear) {
+    }else if (!zone1Clear) {
     // Zone 1 (mid left) has obstacles
         strCmd = "STR160\n";
         moveCmd = "FWD080\n";
-    }
-    if (!zone2Clear) {
+    }else if (!zone2Clear) {
     // Zone 2 (middle) has obstacles
-        moveCmd = "STP\n";
-    }
-    if (!zone3Clear) {
+        moveCmd = "BWD080\n";
+    }else if (!zone3Clear) {
     // Zone 3 (mid right) has obstacles
         strCmd = "STR030\n";
         moveCmd = "FWD080\n";
-    }
-    if (!zone4Clear) {
+    }else if (!zone4Clear) {
     // Zone 4 (far right) has obstacles
         strCmd = "STR080\n";
         moveCmd = "FWD080\n";
+    } else {
+        strCmd = "STR090\n";
+        moveCmd = "FWD080\n";
     }
+
 
     // Write to serial port the driving commands
     bytesWritten = serialPortWrite(moveCmd,portID);
