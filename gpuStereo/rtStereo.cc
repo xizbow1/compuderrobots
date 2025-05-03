@@ -225,7 +225,7 @@ for(int row = 0; row < rows; row++){
     //Smoothing depth image
     Mat medianDepth, filteredDepth, medianObstacles;
     medianBlur(depthImage, medianDepth, 5);
-    medianBlur(depthImage, medianObstacles, 5);
+    medianBlur(obstacleImage, medianObstacles, 5);
     GaussianBlur(medianDepth, filteredDepth, Size(5,5), 0);
 
     // Drawing obstacle zones border lines 
