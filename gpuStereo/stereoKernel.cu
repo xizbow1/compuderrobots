@@ -74,7 +74,7 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
         }
     }
 
-    disparity[row*cols+col] = (unsigned char) (disp);
+    disparity[row*cols+col] = disp;
 
     /*
     // Replace SSD with NCC for better matching
