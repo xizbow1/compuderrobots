@@ -41,6 +41,7 @@ char cmd[cmdLength];
 int bytesWritten;
 const char* strCmd;
 const char* moveCmd;
+const char speed = "064";
 
 portID = serialPortOpen();
 if(portID<0){
@@ -199,19 +200,19 @@ for(int row = 0; row < rows; row++){
     // zone0 - zone1 - zone2 - zone3 - zone4
     if(zone1Clear && zone2Clear && zone3Clear){
         strCmd = "STR090\n";
-        moveCmd = "FWD080\n";
+        moveCmd = "FWD064\n";
     }
     if(!zone1Clear && !zone2Clear && !zone3Clear){
         strCmd = "STR090\n";
-        moveCmd = "BWD080\n";
+        moveCmd = "BWD064\n";
     }
     if(!zone1Clear && !zone2Clear && zone3Clear){
         strCmd = "STR120\n";
-        moveCmd = "FWD080\n";
+        moveCmd = "FWD064\n";
     }
     if(zone1Clear && !zone2Clear && !zone3Clear){
-        strCmd = "STR050\n";
-        moveCmd = "FWD080\n";
+        strCmd = "STR060\n";
+        moveCmd = "FWD064\n";
     }
 
 
