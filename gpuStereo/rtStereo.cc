@@ -200,6 +200,14 @@ for(int row = 0; row < rows; row++){
         strCmd = "STR090\n";
         moveCmd = "FWD080\n";
     }
+    if(!zone1Clear && !zone2Clear && zone3Clear){
+        strCmd = "STR120\n";
+        moveCmd = "FWD080\n";
+    }
+    if(zone1Clear && !zone2Clear && !zone3Clear){
+        strCmd = "STR050\n";
+        moveCmd = "FWD080\n";
+    }
 
     // Write to serial port the driving commands
     bytesWritten = serialPortWrite(moveCmd,portID);
