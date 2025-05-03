@@ -180,6 +180,8 @@ for(int row = 0; row < rows; row++){
     zone4Count = countNonZero(roi_zone4);
     */
 
+    printf("zone0: %f, zone1: %f, zone2: %f, zone3: %f, zone4: %f", zone0Count, zone1Count, zone2Count, zone3Count, zone4Count);
+
     // Determine if zone count is above threshold
     if(zone0Count > obstacleThreshold) zone0Clear = false;
     else zone0Clear = true;
@@ -238,10 +240,10 @@ for(int row = 0; row < rows; row++){
     Mat medianDepth, filteredDepth;
     medianBlur(depthImage, medianDepth, 5);
     //medianBlur(obstacleImage, medianObstacles, 5);
-    GaussianBlur(medianDepth, filteredDepth, Size(5,5), 0);
+    //GaussianBlur(medianDepth, filteredDepth, Size(5,5), 0);
 
     // Display depth map
-    imshow("Depth", filteredDepth);
+    imshow("Depth", medianDepth);
     // Display obstacle map
     imshow("Obstacles",obstacleImage);
     // Dispaly rectified images 
