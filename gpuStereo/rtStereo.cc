@@ -30,7 +30,7 @@ int main(int argc, char** argv) {
 // Dispaly Parameters
 int fps = 60; // in frames per sec
 int frameDelay = 1000/(2*fps); // in millisec 
-double maxDistance = 1000.0; // mm
+double maxDistance = 500.0; // mm
 int rows  = 480;
 int cols  = 640;
 Mat depthImage = Mat::zeros(rows,cols, CV_8UC1);
@@ -55,7 +55,7 @@ int zone1End = 2*(cols/6);
 int zone2End = 4*(cols/6);
 int zone3End = 5*(cols/6);
 int zone4End = cols;
-int obstacleThreshold = 2500;
+int obstacleThreshold = 3000;
 
 //Read rectification lookup tables
 Mat map1x,map1y,map2x,map2y;
@@ -200,8 +200,12 @@ for(int row = 0; row < rows; row++){
         strCmd = "STR090\n";
         moveCmd = "FWD080\n";
     }
-    if(!zone1Clear && !zone2Clear && !zone3Clear){
-        strCmd = "STR100\n";
+    if(!zone1Clear && !zone2Clear && !zone3Clear && zone0Clear){
+        strCmd = "STR110\n";
+        moveCmd = "BWD080\n";
+    }
+    if(!zone1Clear && !zone2Clear && !zone3Clear && zone4Clear){
+        strCmd = "STR070\n";
         moveCmd = "BWD080\n";
     }
     if(!zone1Clear && !zone2Clear && zone3Clear){
