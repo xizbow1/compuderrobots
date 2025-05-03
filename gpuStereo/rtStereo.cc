@@ -151,7 +151,7 @@ for(int row = 0; row < rows; row++){
     int zone3Count = 1;
     int zone4Count = 1;
     int pixel;
-    int startRow = rows * 1/3;
+    int startRow = 0;
     
     for(int row = startRow; row < rows; row++){
         for(int col = 0; col < cols; col++){
@@ -198,21 +198,28 @@ for(int row = 0; row < rows; row++){
     // zone0 - zone1 - zone2 - zone3 - zone4
     if(zone1Clear && zone2Clear && zone3Clear){
         strCmd = "STR090\n";
-        moveCmd = "FWD070\n";
+        moveCmd = "FWD080\n";
     }
     if(!zone1Clear && !zone2Clear && !zone3Clear){
-        strCmd = "STR090\n";
-        moveCmd = "BWD070\n";
+        strCmd = "STR100\n";
+        moveCmd = "BWD080\n";
     }
     if(!zone1Clear && !zone2Clear && zone3Clear){
         strCmd = "STR120\n";
-        moveCmd = "FWD070\n";
+        moveCmd = "FWD080\n";
     }
     if(zone1Clear && !zone2Clear && !zone3Clear){
         strCmd = "STR060\n";
-        moveCmd = "FWD070\n";
+        moveCmd = "FWD080\n";
     }
-
+    if(!zone0Clear && zone1Clear){
+        strCmd = "STR080\n";
+        moveCmd = "FWD080";
+    }
+    if(!zone4Clear && zone3Clear){
+        strCmd = "STR100\n";
+        moveCmd = "FWD080\n";
+    }
 
     // Write to serial port the driving commands
     //printf("STR: %s, Move: %s\n", strCmd, moveCmd);
