@@ -222,23 +222,23 @@ for(int row = 0; row < rows; row++){
     bytesWritten = serialPortWrite(moveCmd,portID);
     bytesWritten = serialPortWrite(strCmd,portID);
 
-    //Smoothing depth image
-    Mat medianDepth, filteredDepth, medianObstacles;
-    medianBlur(depthImage, medianDepth, 5);
-    medianBlur(obstacleImage, medianObstacles, 5);
-    GaussianBlur(medianDepth, filteredDepth, Size(5,5), 0);
-
     // Drawing obstacle zones border lines 
     // Zone 0 far left 
-    line(medianObstacles, Point(zone0End, 0), Point(zone0End, rows-1), Scalar(255), 1);
+    line(obstacleImage, Point(zone0End, 0), Point(zone0End, rows-1), Scalar(255), 1);
     // Zone 1 mid left
-    line(medianObstacles, Point(zone1End, 0), Point(zone1End, rows-1), Scalar(255), 1);
+    line(obstacleImage, Point(zone1End, 0), Point(zone1End, rows-1), Scalar(255), 1);
     // Zone 2 middle
-    line(medianObstacles, Point(zone2End, 0), Point(zone2End, rows-1), Scalar(255), 1);
+    line(obstacleImage, Point(zone2End, 0), Point(zone2End, rows-1), Scalar(255), 1);
     // Zone 3 mid right
-    line(medianObstacles, Point(zone3End, 0), Point(zone3End, rows-1), Scalar(255), 1);
+    line(obstacleImage, Point(zone3End, 0), Point(zone3End, rows-1), Scalar(255), 1);
     // Zone 4 far right
     // End of zone 4 is the edge of the image so no border line is necessary
+
+    //Smoothing depth image
+    Mat medianDepth, filteredDepth;
+    medianBlur(depthImage, medianDepth, 5);
+    //medianBlur(obstacleImage, medianObstacles, 5);
+    GaussianBlur(medianDepth, filteredDepth, Size(5,5), 0);
 
     // Display depth map
     imshow("Depth", filteredDepth);
