@@ -181,7 +181,7 @@ for(int row = 0; row < rows; row++){
     zone4Count = countNonZero(roi_zone4);
     */
 
-    printf("zone0: %d, zone1: %d, zone2: %d, zone3: %d, zone4: %d\n", zone0Count, zone1Count, zone2Count, zone3Count, zone4Count);
+    //printf("zone0: %d, zone1: %d, zone2: %d, zone3: %d, zone4: %d\n", zone0Count, zone1Count, zone2Count, zone3Count, zone4Count);
 
     // Determine if zone count is above threshold
     if(zone0Count > obstacleThreshold) zone0Clear = false;
@@ -194,29 +194,28 @@ for(int row = 0; row < rows; row++){
     else zone3Clear = true;
     if(zone4Count > obstacleThreshold) zone4Clear = false;
     else zone4Clear = true;
-    moveCmd = "FWD080\n";
 
     // zone0 - zone1 - zone2 - zone3 - zone4
     if(zone1Clear && zone2Clear && zone3Clear){
         strCmd = "STR090\n";
-        moveCmd = "FWD064\n";
+        moveCmd = "FWD070\n";
     }
     if(!zone1Clear && !zone2Clear && !zone3Clear){
         strCmd = "STR090\n";
-        moveCmd = "BWD064\n";
+        moveCmd = "BWD070\n";
     }
     if(!zone1Clear && !zone2Clear && zone3Clear){
         strCmd = "STR120\n";
-        moveCmd = "FWD064\n";
+        moveCmd = "FWD070\n";
     }
     if(zone1Clear && !zone2Clear && !zone3Clear){
         strCmd = "STR060\n";
-        moveCmd = "FWD064\n";
+        moveCmd = "FWD070\n";
     }
 
 
     // Write to serial port the driving commands
-    printf("STR: %s, Move: %s\n", strCmd, moveCmd);
+    //printf("STR: %s, Move: %s\n", strCmd, moveCmd);
     bytesWritten = serialPortWrite(moveCmd,portID);
     bytesWritten = serialPortWrite(strCmd,portID);
 
