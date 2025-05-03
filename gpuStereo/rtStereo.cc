@@ -41,7 +41,6 @@ char cmd[cmdLength];
 int bytesWritten;
 const char* strCmd;
 const char* moveCmd;
-const char speed = "064";
 
 portID = serialPortOpen();
 if(portID<0){
