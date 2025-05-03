@@ -195,31 +195,11 @@ for(int row = 0; row < rows; row++){
     if(zone4Count > obstacleThreshold) zone4Clear = false;
     else zone4Clear = true;
 
-    // Check if any zones have obstacles
-    if (!zone0Clear ) {
-    // Zone 0 (far left) has obstacles
-        strCmd = "STR100\n";
-        moveCmd = "FWD080\n";
-    }else if (!zone1Clear) {
-    // Zone 1 (mid left) has obstacles
-        strCmd = "STR160\n";
-        moveCmd = "FWD080\n";
-    }else if (!zone2Clear) {
-    // Zone 2 (middle) has obstacles
-        moveCmd = "BWD080\n";
-    }else if (!zone3Clear) {
-    // Zone 3 (mid right) has obstacles
-        strCmd = "STR030\n";
-        moveCmd = "FWD080\n";
-    }else if (!zone4Clear) {
-    // Zone 4 (far right) has obstacles
-        strCmd = "STR080\n";
-        moveCmd = "FWD080\n";
-    } else {
+    // zone0 - zone1 - zone2 - zone3 - zone4
+    if(zone1Clear && zone2Clear && zone3Clear){
         strCmd = "STR090\n";
         moveCmd = "FWD080\n";
     }
-
 
     // Write to serial port the driving commands
     bytesWritten = serialPortWrite(moveCmd,portID);
