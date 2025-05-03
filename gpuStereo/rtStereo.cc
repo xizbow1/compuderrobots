@@ -30,7 +30,7 @@ int main(int argc, char** argv) {
 // Dispaly Parameters
 int fps = 60; // in frames per sec
 int frameDelay = 1000/(2*fps); // in millisec 
-double maxDistance = 500.0; // mm
+double maxDistance = 750.0; // mm
 int rows  = 480;
 int cols  = 640;
 Mat depthImage = Mat::zeros(rows,cols, CV_8UC1);
@@ -232,13 +232,13 @@ for(int row = 0; row < rows; row++){
 
     // Drawing obstacle zones border lines 
     // Zone 0 far left 
-    line(obstacleImage, Point(zone0End, 0), Point(zone0End, rows-1), Scalar(255), 1);
+    //line(obstacleImage, Point(zone0End, 0), Point(zone0End, rows-1), Scalar(255), 1);
     // Zone 1 mid left
-    line(obstacleImage, Point(zone1End, 0), Point(zone1End, rows-1), Scalar(255), 1);
+    //line(obstacleImage, Point(zone1End, 0), Point(zone1End, rows-1), Scalar(255), 1);
     // Zone 2 middle
-    line(obstacleImage, Point(zone2End, 0), Point(zone2End, rows-1), Scalar(255), 1);
+    //line(obstacleImage, Point(zone2End, 0), Point(zone2End, rows-1), Scalar(255), 1);
     // Zone 3 mid right
-    line(obstacleImage, Point(zone3End, 0), Point(zone3End, rows-1), Scalar(255), 1);
+    //line(obstacleImage, Point(zone3End, 0), Point(zone3End, rows-1), Scalar(255), 1);
     // Zone 4 far right
     // End of zone 4 is the edge of the image so no border line is necessary
 
