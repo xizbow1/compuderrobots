@@ -152,7 +152,7 @@ for(int row = 0; row < rows; row++){
     int zone4Count = 1;
     int pixel;
     int startRow = rows * 1/3;
-
+    /*
     for(int row = startRow; row < rows; row++){
         for(int col = 0; col < cols; col++){
             pixel = (int)(obstacleImage.data[row*cols+col]);
@@ -163,7 +163,8 @@ for(int row = 0; row < rows; row++){
             if(col >= zone3End && col < zone4End && pixel > 0) zone4Count++;    // Far Right Zone
         }
     }
-    /*
+    */
+    
     Mat roi_zone0 = obstacleImage(Rect(0,0, zone0End, rows));
     zone0Count = countNonZero(roi_zone0);
 
@@ -178,9 +179,9 @@ for(int row = 0; row < rows; row++){
 
     Mat roi_zone4 = obstacleImage(Rect(0,0, zone4End, rows));
     zone4Count = countNonZero(roi_zone4);
-    */
+    
 
-    printf("zone0: %f, zone1: %f, zone2: %f, zone3: %f, zone4: %f", zone0Count, zone1Count, zone2Count, zone3Count, zone4Count);
+    printf("zone0: %d, zone1: %d, zone2: %d, zone3: %d, zone4: %d\n", zone0Count, zone1Count, zone2Count, zone3Count, zone4Count);
 
     // Determine if zone count is above threshold
     if(zone0Count > obstacleThreshold) zone0Clear = false;
