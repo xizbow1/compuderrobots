@@ -30,7 +30,7 @@ int main(int argc, char** argv) {
 // Dispaly Parameters
 int fps = 30; // in frames per sec
 int frameDelay = 1000/(2*fps); // in millisec 
-double maxDistance = 1000.0; // mm
+double maxDistance = 500.0; // mm
 int rows  = 480;
 int cols  = 640;
 Mat depthImage = Mat::zeros(rows,cols, CV_8UC1);
@@ -199,6 +199,10 @@ for(int row = 0; row < rows; row++){
     if(zone1Clear && zone2Clear && zone3Clear){
         strCmd = "STR090\n";
         moveCmd = "FWD080\n";
+    }
+    if(!zone2Clear){
+        strCmd = "STR090\n";
+        moveCmd = "BWD080\n";
     }
     if(!zone1Clear && !zone2Clear && zone3Clear){
         strCmd = "STR120\n";
