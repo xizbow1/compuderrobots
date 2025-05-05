@@ -18,7 +18,7 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     int disparityStep = 2;
     int windowStep = 2;
     double contrast;
-    double contrastThreshold = 20;
+    double contrastThreshold;
     
     unsigned char leftPixel;
     unsigned char rightPixel;
@@ -39,11 +39,12 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     // if contrast too low return
     minIntensity = (double)(left[row*cols+col]);
     maxIntensity = minIntensity;
+    contrastThreshold = maxIntensity * 0.05; 
 
     // Compute the sums within the windowsin each image
     for(int i = -halfWindow; i < halfWindow + 1; i += windowStep){
         for(int j = -halfWindow; j < halfWindow + 1; j += windowStep){
-            intensity = (double)(left[(row+i) * cols + (col + j)]);
+            intensity = (double)(left[(row + i) * cols + (col + j)]);
             if(intensity < minIntensity) minIntensity = intensity;
             if(intensity > maxIntensity) maxIntensity = intensity;
         }
@@ -74,7 +75,7 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
         }
     }
 
-    disparity[row*cols+col] = disp;
+    disparity[row*cols+col] = (unsigned char) (disp);
 
     /*
     // Replace SSD with NCC for better matching
@@ -110,8 +111,9 @@ for (int k = 0; k < maxDisparity; k += disparityStep) {
         if (ncc > minSumSqDiff) { // Maximize NCC instead of minimizing SSD
             minSumSqDiff = ncc;
             disp = k;
-        }
+        } 
     }
+        disparity[row*cols+col] = (unsigned char) (disp);
 }
     */
 
