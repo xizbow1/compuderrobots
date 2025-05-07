@@ -51,16 +51,13 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
 
     // Ignore any contrast below the threshold
     contrast = maxIntensity - minIntensity;
-    if(contrast < contrastThreshold){
-        disparity[row * cols + col];
-        return;
-    } 
+    if(contrast < contrastThreshold) return;
 
     // Compute sum of squred differences each shifted window
-    for(int k=0; k<maxDisparity;k++){
+    for(int k=0; k < maxDisparity; k++){
         sumSqDiff=0.0;
-        for(int i = -halfWindow; i<halfWindow+1;i++){
-            for(int j = -halfWindow; j<halfWindow+1;j++){
+        for(int i = -halfWindow; i < halfWindow+1;i++){
+            for(int j = -halfWindow; j < halfWindow+1;j++){
                     if(row + i < rows && col + j < cols && 0 <= col + j - k && col + j - k < cols){
                         leftPixel = left[(row+i)*cols+(col+j)];
                         rightPixel = right[(row+i)*cols+(col+j-k)];

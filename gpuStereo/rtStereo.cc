@@ -266,35 +266,35 @@ for(int row = 0; row < rows; row++){
     // zone0 - zone1 - zone2 - zone3 - zone4
     if(zone1Clear && zone2Clear && zone3Clear){
         strCmd = "STR090\n";
-        moveCmd = "BWD080\n";
+        moveCmd = "FWD090\n";
     }
     if(!zone0Clear && !zone1Clear && !zone2Clear && !zone3Clear && !zone4Clear){
-        strCmd = "STR90\n";
-        moveCmd = "BWD080\n";
+        strCmd = "STR090\n";
+        moveCmd = "BWD090\n";
     }
     if(!zone1Clear && !zone2Clear && !zone3Clear && zone0Clear){
         strCmd = "STR110\n";
-        moveCmd = "BWD080\n";
+        moveCmd = "BWD090\n";
     }
     if(!zone1Clear && !zone2Clear && !zone3Clear && zone4Clear){
         strCmd = "STR070\n";
-        moveCmd = "BWD080\n";
+        moveCmd = "BWD090\n";
     }
     if(!zone1Clear && !zone2Clear && zone3Clear){
         strCmd = "STR120\n";
-        moveCmd = "FWD080\n";
+        moveCmd = "FWD090\n";
     }
     if(zone1Clear && !zone2Clear && !zone3Clear){
         strCmd = "STR060\n";
-        moveCmd = "FWD080\n";
+        moveCmd = "FWD090\n";
     }
     if(!zone0Clear && zone1Clear){
-        strCmd = "STR080\n";
-        moveCmd = "FWD080";
+        strCmd = "STR100\n";
+        moveCmd = "FWD090";
     }
     if(!zone4Clear && zone3Clear){
-        strCmd = "STR100\n";
-        moveCmd = "FWD080\n";
+        strCmd = "STR080\n";
+        moveCmd = "FWD090\n";
     }
 
     // Write to serial port the driving commands
