@@ -135,7 +135,7 @@ void maneuver(int choice){
     delay(3000);
     
   } else if(choice == 2){
-    
+    // Back up to turn right
     stop();
     delay(1000);
     drive(90, true, 128);
@@ -151,6 +151,22 @@ void maneuver(int choice){
     delay(2000);
     stop();
     
+  } else if(choice == 3){
+    // Back up to turn left
+    stop();
+    delay(1000);
+    drive(90, true, 128);
+    delay(2000);
+    drive(70, false, 128);
+    delay(2000);
+    drive(90, true, 128);
+    delay(2000);
+    drive(110, false, 128);
+    delay(2000);
+    stop();
+    drive(90, true, 128);
+    delay(2000);
+    stop();
   } else {
     stop();
   }
