@@ -205,13 +205,11 @@ for(int row = 0; row < rows; row++){
     // On the robot left to right will be reversed
     // The robot's right will be zone 0
     // The robot's left will be zone 4
-    /*
     bool zone0Clear = true;
     bool zone1Clear = true;
     bool zone2Clear = true;
     bool zone3Clear = true;
     bool zone4Clear = true;
-    */
 
     int zone0Count = 1;
     int zone1Count = 1;
@@ -301,7 +299,6 @@ for(int row = 0; row < rows; row++){
     //printf("STR: %s, Move: %s\n", strCmd, moveCmd);
     bytesWritten = serialPortWrite(moveCmd,portID);
     bytesWritten = serialPortWrite(strCmd,portID);
-    */
 
     // Drawing obstacle zones border lines 
     // Zone 0 far left 
