@@ -105,7 +105,6 @@ char cmd[cmdLength];
 int bytesWritten;
 const char* strCmd;
 const char* moveCmd;
-const char* manCmd;
 
 portID = serialPortOpen();
 if(portID<0){
@@ -265,50 +264,44 @@ for(int row = 0; row < rows; row++){
     else zone4Clear = true;
 
     // zone0 - zone1 - zone2 - zone3 - zone4
-    bool manUsed = false;
-
-    // zone0 - zone1 - zone2 - zone3 - zone4
     if(zone1Clear && zone2Clear && zone3Clear){
-        strCmd = "STR090\n";
-        moveCmd = "FWD080\n";
-    }
-    else if(!zone0Clear && !zone1Clear && !zone2Clear && !zone3Clear && !zone4Clear){
         strCmd = "STR090\n";
         moveCmd = "BWD080\n";
     }
-    else if(!zone1Clear && !zone2Clear && !zone3Clear && zone0Clear){
-        manCmd = "MAN003\n";
-        manUsed = true;
+    if(!zone0Clear && !zone1Clear && !zone2Clear && !zone3Clear && !zone4Clear){
+        strCmd = "STR90\n";
+        moveCmd = "BWD080\n";
     }
-    else if(!zone1Clear && !zone2Clear && !zone3Clear && zone4Clear){
-        manCmd = "MAN002\n";
-        manUsed = true;
+    if(!zone1Clear && !zone2Clear && !zone3Clear && zone0Clear){
+        strCmd = "STR110\n";
+        moveCmd = "BWD080\n";
     }
-    else if(!zone1Clear && !zone2Clear && zone3Clear && !manUsed){
+    if(!zone1Clear && !zone2Clear && !zone3Clear && zone4Clear){
+        strCmd = "STR070\n";
+        moveCmd = "BWD080\n";
+    }
+    if(!zone1Clear && !zone2Clear && zone3Clear){
         strCmd = "STR120\n";
         moveCmd = "FWD080\n";
     }
-    else if(zone1Clear && !zone2Clear && !zone3Clear && !manUsed){
+    if(zone1Clear && !zone2Clear && !zone3Clear){
         strCmd = "STR060\n";
         moveCmd = "FWD080\n";
     }
-    else if(!zone0Clear && zone1Clear && !manUsed){
+    if(!zone0Clear && zone1Clear){
         strCmd = "STR080\n";
         moveCmd = "FWD080";
     }
-    else if(!zone4Clear && zone3Clear && !manUsed){
+    if(!zone4Clear && zone3Clear){
         strCmd = "STR100\n";
         moveCmd = "FWD080\n";
     }
 
     // Write to serial port the driving commands
-    //printf("STR: %s, Move: %s\n", strCmd, moveCmd);
-    if(manUsed){
-        bytesWritten = serialPortWrite(manCmd,portID);
-    } else {
-        bytesWritten = serialPortWrite(moveCmd,portID);
-        bytesWritten = serialPortWrite(strCmd,portID);
-    }
+    printf("STR: %s, Move: %s\n", strCmd, moveCmd);
+    bytesWritten = serialPortWrite(moveCmd,portID);
+    bytesWritten = serialPortWrite(strCmd,portID);
+
     // Drawing obstacle zones border lines 
     // Zone 0 far left 
     line(obstacleImage, Point(zone0End, 0), Point(zone0End, rows-1), Scalar(255), 1);
