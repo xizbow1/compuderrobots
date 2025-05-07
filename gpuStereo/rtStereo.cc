@@ -93,7 +93,7 @@ int main(int argc, char** argv) {
 // Dispaly Parameters
 int fps = 60; // in frames per sec
 int frameDelay = 1000/(2*fps); // in millisec 
-double maxDistance = 500.0; // mm
+double maxDistance = 250.0; // mm
 double maxDisparity = 64; // pixels
 int rows  = 480;
 int cols  = 640;
