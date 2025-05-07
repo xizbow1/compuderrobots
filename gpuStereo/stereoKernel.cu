@@ -23,7 +23,7 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     unsigned char leftPixel;
     unsigned char rightPixel;
     unsigned char centerPixel;
-    int disp = 0;
+    double disp = 0;
     double distance;
     double sumSqDiff;
     double minSumSqDiff = (double)INT_MAX*(double)INT_MAX;
