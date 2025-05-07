@@ -325,7 +325,7 @@ for(int row = 0; row < rows; row++){
     // Display depth map
     imshow("Depth", medianDepth);
     // Display obstacle map
-    imshow("Obstacles",obstaclesImage);
+    imshow("Obstacles",obstacleImage);
     // Dispaly rectified images 
     //hconcat(rectifiedLeft, rectifiedRight,both);
     //imshow("Left and Right",both);
