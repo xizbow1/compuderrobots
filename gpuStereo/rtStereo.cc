@@ -25,7 +25,7 @@ void intHandler(int sig){
     printf("\nStopping robot and exiting...\n");
 }
 
-void dodgeObstacles(int zone0Count, int zone1Count, int zone2Count, int zone3Count, int zone4Count, int portID){
+void dodgeObstacles(unsigned int zone0Count, unsigned int zone1Count, unsigned int zone2Count, unsigned int zone3Count, unsigned int zone4Count, unsigned int portID){
     bool zone0Clear = true;
     bool zone1Clear = true;
     bool zone2Clear = true;
@@ -120,7 +120,7 @@ int zone1End = 2*(cols/6);
 int zone2End = 4*(cols/6);
 int zone3End = 5*(cols/6);
 int zone4End = cols;
-int obstacleThreshold = 2000;
+unsigned int obstacleThreshold = 2000;
 
 //Read rectification lookup tables
 Mat map1x,map1y,map2x,map2y;
@@ -211,11 +211,11 @@ for(int row = 0; row < rows; row++){
     bool zone3Clear = true;
     bool zone4Clear = true;
 
-    int zone0Count = 1;
-    int zone1Count = 1;
-    int zone2Count = 1;
-    int zone3Count = 1;
-    int zone4Count = 1;
+    unsigned int zone0Count = 1;
+    unsigned int zone1Count = 1;
+    unsigned int zone2Count = 1;
+    unsigned int zone3Count = 1;
+    unsigned int zone4Count = 1;
     int pixel;
     int startRow = rows * 1/3;
     
