@@ -319,13 +319,13 @@ for(int row = 0; row < rows; row++){
     //Smoothing depth image
     Mat medianDepth, filteredDepth, medianObstacles;
     medianBlur(depthImage, medianDepth, 5);
-    medianBlur(obstacleImage, medianObstacles, 5);
+    //medianBlur(obstacleImage, medianObstacles, 5);
     //GaussianBlur(medianDepth, filteredDepth, Size(5,5), 0);
 
     // Display depth map
     imshow("Depth", medianDepth);
     // Display obstacle map
-    imshow("Obstacles",medianObstacles);
+    imshow("Obstacles",obstaclesImage);
     // Dispaly rectified images 
     //hconcat(rectifiedLeft, rectifiedRight,both);
     //imshow("Left and Right",both);
