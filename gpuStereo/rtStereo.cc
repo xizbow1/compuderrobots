@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
 int fps = 60; // in frames per sec
 int frameDelay = 1000/(2*fps); // in millisec 
 double maxDistance = 1000.0; // mm
-double maxDisparity 64; // pixels
+double maxDisparity = 64; // pixels
 int rows  = 480;
 int cols  = 640;
 Mat depthImage = Mat::zeros(rows,cols, CV_8UC1);
