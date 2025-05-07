@@ -32,13 +32,21 @@ __global__ void obstacleKernel(const unsigned char* disparity,
 
     double distance;
 
-    if(z > 0) distance = (baseline * fx) / z;
-    else distance = 0.0;
+
+    if (z > 0 && z < maxDistance) {
+        distance = (baseline * fx) / z;
+    } else {
+        distance = maxDistance + 1; // Mark as out of range
+    }
+    /*
+        if(z > 0) distance = (baseline * fx) / z;
+        else distance = 0.0;
+    */
 
     if(distance > 0.0 && distance < maxDistance){
         obstacles[row * cols + col] = (unsigned char)(255);
     } else {
-        obstacles[row * cols + col] = (unsigned char) 0;
+        obstacles[row * cols + col] = (unsigned char)(0);
     }
 
 /*

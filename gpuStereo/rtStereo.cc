@@ -25,15 +25,80 @@ void intHandler(int sig){
     printf("\nStopping robot and exiting...\n");
 }
 
+void dodgeObstacles(int zone0Count, int zone1Count, int zone2Count, int zone3Count, int zone4Count, int portID){
+    bool zone0Clear = true;
+    bool zone1Clear = true;
+    bool zone2Clear = true;
+    bool zone3Clear = true;
+    bool zone4Clear = true;
+    const char* strCmd;
+    const char* moveCmd;
+    int bytesWritten;
+    int obstacleThreshold = 2000;
+
+    // Determine if zone count is above threshold
+    if(zone0Count > obstacleThreshold) zone0Clear = false;
+    else zone0Clear = true;
+    if(zone1Count > obstacleThreshold) zone1Clear = false;
+    else zone1Clear = true;
+    if(zone2Count > obstacleThreshold) zone2Clear = false;
+    else zone2Clear = true;
+    if(zone3Count > obstacleThreshold) zone3Clear = false;
+    else zone3Clear = true;
+    if(zone4Count > obstacleThreshold) zone4Clear = false;
+    else zone4Clear = true;
+    
+    // zone0 - zone1 - zone2 - zone3 - zone4
+    if(zone1Clear && zone2Clear && zone3Clear){
+        strCmd = "STR090\n";
+        moveCmd = "FWD080\n";
+    }
+    if(!zone0Clear && !zone1Clear && !zone2Clear && !zone3Clear && !zone4Clear){
+        strCmd = "STR090\n";
+        moveCmd = "BWD080\n";
+    }
+    if(!zone1Clear && !zone2Clear && !zone3Clear && zone0Clear){
+        strCmd = "STR110\n";
+        moveCmd = "BWD080\n";
+    }
+    if(!zone1Clear && !zone2Clear && !zone3Clear && zone4Clear){
+        strCmd = "STR070\n";
+        moveCmd = "BWD080\n";
+    }
+    if(!zone1Clear && !zone2Clear && zone3Clear){
+        strCmd = "STR120\n";
+        moveCmd = "FWD080\n";
+    }
+    if(zone1Clear && !zone2Clear && !zone3Clear){
+        strCmd = "STR060\n";
+        moveCmd = "FWD080\n";
+    }
+    if(!zone0Clear && zone1Clear){
+        strCmd = "STR080\n";
+        moveCmd = "FWD080";
+    }
+    if(!zone4Clear && zone3Clear){
+        strCmd = "STR100\n";
+        moveCmd = "FWD080\n";
+    }
+    
+    // Write to serial port the driving commands
+    printf("STR: %s, Move: %s\n", strCmd, moveCmd);
+    bytesWritten = serialPortWrite(moveCmd,portID);
+    bytesWritten = serialPortWrite(strCmd,portID);
+}
+
 int main(int argc, char** argv) {
 
 // Dispaly Parameters
 int fps = 60; // in frames per sec
 int frameDelay = 1000/(2*fps); // in millisec 
-double maxDistance = 500.0; // mm
+double maxDistance = 1000.0; // mm
+double maxDisparity = 64; // pixels
 int rows  = 480;
 int cols  = 640;
 Mat depthImage = Mat::zeros(rows,cols, CV_8UC1);
+
 
 // Serial parameters
 const int cmdLength = 7;
@@ -55,7 +120,7 @@ int zone1End = 2*(cols/6);
 int zone2End = 4*(cols/6);
 int zone3End = 5*(cols/6);
 int zone4End = cols;
-int obstacleThreshold = 5000;
+int obstacleThreshold = 2000;
 
 //Read rectification lookup tables
 Mat map1x,map1y,map2x,map2y;
@@ -140,18 +205,21 @@ for(int row = 0; row < rows; row++){
     // On the robot left to right will be reversed
     // The robot's right will be zone 0
     // The robot's left will be zone 4
+    /*
     bool zone0Clear = true;
     bool zone1Clear = true;
     bool zone2Clear = true;
     bool zone3Clear = true;
     bool zone4Clear = true;
+    */
+
     int zone0Count = 1;
     int zone1Count = 1;
     int zone2Count = 1;
     int zone3Count = 1;
     int zone4Count = 1;
     int pixel;
-    int startRow = 0;
+    int startRow = rows * 1/3;
     
     for(int row = startRow; row < rows; row++){
         for(int col = 0; col < cols; col++){
@@ -198,7 +266,11 @@ for(int row = 0; row < rows; row++){
     // zone0 - zone1 - zone2 - zone3 - zone4
     if(zone1Clear && zone2Clear && zone3Clear){
         strCmd = "STR090\n";
-        moveCmd = "FWD080\n";
+        moveCmd = "BWD080\n";
+    }
+    if(!zone0Clear && !zone1Clear && !zone2Clear && !zone3Clear && !zone4Clear){
+        strCmd = "STR90\n";
+        moveCmd = "BWD080\n";
     }
     if(!zone1Clear && !zone2Clear && !zone3Clear && zone0Clear){
         strCmd = "STR110\n";
@@ -229,6 +301,7 @@ for(int row = 0; row < rows; row++){
     //printf("STR: %s, Move: %s\n", strCmd, moveCmd);
     bytesWritten = serialPortWrite(moveCmd,portID);
     bytesWritten = serialPortWrite(strCmd,portID);
+    */
 
     // Drawing obstacle zones border lines 
     // Zone 0 far left 
@@ -243,7 +316,7 @@ for(int row = 0; row < rows; row++){
     // End of zone 4 is the edge of the image so no border line is necessary
 
     //Smoothing depth image
-    Mat medianDepth, filteredDepth;
+    Mat medianDepth, filteredDepth, medianObstacles;
     medianBlur(depthImage, medianDepth, 5);
     //medianBlur(obstacleImage, medianObstacles, 5);
     //GaussianBlur(medianDepth, filteredDepth, Size(5,5), 0);
@@ -266,7 +339,7 @@ for(int row = 0; row < rows; row++){
     }
 
     // Send a final stop command to ensure robot stops
-    serialPortWrite("STP\n", portID);
+    bytesWritten = serialPortWrite("STP\n", portID);
     
     // Close serial port
     if(serialPortClose(portID)< 0){
@@ -283,3 +356,4 @@ for(int row = 0; row < rows; row++){
 
     return 0;
 }
+
