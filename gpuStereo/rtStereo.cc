@@ -142,11 +142,14 @@ for(int row = 0; row < rows; row++){
     // On the robot left to right will be reversed
     // The robot's right will be zone 0
     // The robot's left will be zone 4
+    /*
     bool zone0Clear = true;
     bool zone1Clear = true;
     bool zone2Clear = true;
     bool zone3Clear = true;
     bool zone4Clear = true;
+    */
+
     int zone0Count = 1;
     int zone1Count = 1;
     int zone2Count = 1;
@@ -300,6 +303,8 @@ void dodgeObstacles(int zone0Count, int zone1Count, int zone2Count, int zone3Cou
     bool zone4Clear = true;
     const char* strCmd;
     const char* moveCmd;
+    int bytesWritten;
+    int obstacleThreshold = 2000;
 
     // Determine if zone count is above threshold
     if(zone0Count > obstacleThreshold) zone0Clear = false;
