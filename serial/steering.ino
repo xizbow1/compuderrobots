@@ -47,6 +47,7 @@ void setup()
 //Takes 1 parameter integer
 //returns nothing
 void drive(int theta, bool dir, int spd){
+
   if(theta < 25){
     theta = 25;
   } else if(theta > 155){
@@ -56,7 +57,7 @@ void drive(int theta, bool dir, int spd){
     spd = 128;
   }
   currSpd = spd;
-  prevAngle = theta;
+
   double L = 23.5;
   double W = 16.25;
   double wheelBase = W/L;//calculate the wheel base
@@ -71,27 +72,27 @@ void drive(int theta, bool dir, int spd){
     currDir = dir;
   	digitalWrite(pinIN1, HIGH);
   	digitalWrite(pinIN2, LOW);
-  	digitalWrite(pinIN3, HIGH);
-  	digitalWrite(pinIN4, LOW);
-  } else {
-    currDir = dir;
-    digitalWrite(pinIN1, LOW);
-  	digitalWrite(pinIN2, HIGH);
   	digitalWrite(pinIN3, LOW);
   	digitalWrite(pinIN4, HIGH);
+  } else {
+    currDir = dir;
+        digitalWrite(pinIN1, LOW);
+  	digitalWrite(pinIN2, HIGH);
+  	digitalWrite(pinIN3, HIGH);
+  	digitalWrite(pinIN4, LOW);
   }
   
   //Straight
   if(theta == 90){
     if(prevAngle > 90){
-      theta = 84;
+      theta = 83;
     }
     steeringServo.write(theta);//set turning angle to theta
     vR = spd;
     vL = spd;
     delay(500);
-  	analogWrite(pinENA12, vR);
-  	analogWrite(pinENA34, vL);
+    analogWrite(pinENA12, vR);
+    analogWrite(pinENA34, vL);
     
   //Turn
   }else{
@@ -100,18 +101,20 @@ void drive(int theta, bool dir, int spd){
   	analogWrite(pinENA12, vR);
   	analogWrite(pinENA34, vL);
   }
+  prevAngle = theta;
 }
- 
+  
 
 //function stop()
 //no parameters
 //returns nothing
 void stop(){
   if(prevAngle > 90){
-    steeringServo.write(84);
+    steeringServo.write(83);
   }else{
-  steeringServo.write(90);//set wheels straight
+    steeringServo.write(90);//set wheels straight
   }
+  currSpd = 0;
   //stop power to wheels
   digitalWrite(pinIN1, LOW);
   digitalWrite(pinIN2, LOW);
@@ -125,19 +128,29 @@ void stop(){
 void maneuver(int choice){
   if(choice == 1){
     //figure 8
-  	stop();
-  	delay(1000);
-  	drive(140, true, 64);
-  	delay(2000);
-  	drive(90, true, 64);
-  	delay(1000);
-  	drive(40, true, 64);
-  	delay(2000);
-  	drive(90, true, 64);
-  	delay(1000);
-  	stop();
-  } else if(choice == 2){
     stop();
+    drive(135, true, 96);
+    delay(3000);
+    drive(45, true, 96);
+    delay(3000);
+    
+  } else if(choice == 2){
+    
+    stop();
+    delay(1000);
+    drive(90, true, 128);
+    delay(2000);
+    drive(110, false, 128);
+    delay(2000);
+    drive(90, true, 128);
+    delay(2000);
+    drive(70, false, 128);
+    delay(2000);
+    stop();
+    drive(90, true, 128);
+    delay(2000);
+    stop();
+    
   } else {
     stop();
   }
@@ -151,11 +164,11 @@ void loop()
     cmd = cmdRec.substring(0,3);
     value = cmdRec.substring(3,6);
     intValue = value.toInt();
-    
-    //Serial.print("recieved");
-    Serial.println(cmd);
-    //Serial.print("and ");
-    Serial.println(value);
+//    
+//    //Serial.print("recieved");
+//    Serial.println(cmd);
+//    //Serial.print("and ");
+//    Serial.println(value);
   }
   
   if(cmd == "FWD"){
