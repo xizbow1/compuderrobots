@@ -5,8 +5,7 @@
 #include <limits.h>
 
 __global__ void stereoKernel(unsigned char* left, unsigned char* right, 
-                            unsigned char* disparity, double maxDistance
-                            ,
+                            unsigned char* disparity, double maxDistance,                            ,
                             int rows, int cols){
 
     
@@ -14,17 +13,18 @@ __global__ void stereoKernel(unsigned char* left, unsigned char* right,
 int col = blockIdx.x*blockDim.x + threadIdx.x;
 int row = blockIdx.y*blockDim.y + threadIdx.y;
 
-    const int windowWidth = 5; //must be odd
+    const int windowWidth = 3; //must be odd
     const int halfWindow = (windowWidth-1)/2;
     int disparityStep = 2;
     int windowStep = 2;
+    double maxDisparity = 128.0;
     double contrast;
-    double contrastThreshold = 15;
+    double contrastThreshold = 5;
     
     unsigned char leftPixel;
     unsigned char rightPixel;
     unsigned char centerPixel;
-    double disp = 0;
+    double disp = 0.0;
     double distance;
     double sumSqDiff;
     double minSumSqDiff = (double)INT_MAX*(double)INT_MAX;
@@ -35,15 +35,14 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     if(row < halfWindow || row > rows-halfWindow ||
         col < halfWindow || col > cols - halfWindow) return;
 
-
     // Compute the contrast for left window
     // if contrast too low return
     minIntensity = (double)(left[row*cols+col]);
     maxIntensity = minIntensity;
 
     // Compute the sums within the windowsin each image
-    for(int i = -halfWindow; i < halfWindow + 1; i += windowStep){
-        for(int j = -halfWindow; j < halfWindow + 1; j += windowStep){
+    for(int i = -halfWindow; i < halfWindow + 1; i++){
+        for(int j = -halfWindow; j < halfWindow + 1; j++){
             intensity = (double)(left[(row + i) * cols + (col + j)]);
             if(intensity < minIntensity) minIntensity = intensity;
             if(intensity > maxIntensity) maxIntensity = intensity;
@@ -52,14 +51,16 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
 
     // Ignore any contrast below the threshold
     contrast = maxIntensity - minIntensity;
-    if(contrast < contrastThreshold) return;
+    if(contrast < contrastThreshold){
+        disparity[row * cols + col];
+        return;
+    } 
 
     // Compute sum of squred differences each shifted window
-    for(int k=0; k<maxDistance
-        ;k += disparityStep){
+    for(int k=0; k<maxDisparity;k++){
         sumSqDiff=0.0;
-        for(int i = -halfWindow; i<halfWindow+1;i += windowStep){
-            for(int j = -halfWindow; j<halfWindow+1;j += windowStep){
+        for(int i = -halfWindow; i<halfWindow+1;i++){
+            for(int j = -halfWindow; j<halfWindow+1;j++){
                     if(row + i < rows && col + j < cols && 0 <= col + j - k && col + j - k < cols){
                         leftPixel = left[(row+i)*cols+(col+j)];
                         rightPixel = right[(row+i)*cols+(col+j-k)];
@@ -72,11 +73,11 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
         //compute min sum square diff
         if(sumSqDiff < minSumSqDiff){
             minSumSqDiff = sumSqDiff;
-            disp = k;
+            disp = (unsigned char)k;
         }
     }
 
-    disparity[row*cols+col] = (unsigned char) (disp);
+    disparity[row*cols+col] = disp;
 
     /*
     // Replace SSD with NCC for better matching

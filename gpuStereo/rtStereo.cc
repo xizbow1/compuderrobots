@@ -91,10 +91,9 @@ void dodgeObstacles(unsigned int zone0Count, unsigned int zone1Count, unsigned i
 int main(int argc, char** argv) {
 
 // Dispaly Parameters
-int fps = 60; // in frames per sec
+int fps = 30; // in frames per sec
 int frameDelay = 1000/(2*fps); // in millisec 
 double maxDistance = 1000.0; // mm
-double maxDisparity = 64; // pixels
 int rows  = 480;
 int cols  = 640;
 Mat depthImage = Mat::zeros(rows,cols, CV_8UC1);
@@ -198,8 +197,11 @@ for(int row = 0; row < rows; row++){
 
     // Compute depth image using GPU
     stereoDepth(&rectifiedLeft, &rectifiedRight, &depthImage, maxDistance, rows, cols);
+
     // Compute obstacles image using GPU
     stereoObstacles(&depthImage, &obstacleImage, maxDistance, rows, cols);
+
+    
 
 
     // Zones are split from left to right 0 - 4
