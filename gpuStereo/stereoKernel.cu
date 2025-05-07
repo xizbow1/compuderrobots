@@ -18,7 +18,7 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     int disparityStep = 2;
     int windowStep = 2;
     double contrast;
-    double contrastThreshold;
+    double contrastThreshold = 10;
     
     unsigned char leftPixel;
     unsigned char rightPixel;
@@ -39,7 +39,6 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     // if contrast too low return
     minIntensity = (double)(left[row*cols+col]);
     maxIntensity = minIntensity;
-    contrastThreshold = maxIntensity * 0.05; 
 
     // Compute the sums within the windowsin each image
     for(int i = -halfWindow; i < halfWindow + 1; i += windowStep){

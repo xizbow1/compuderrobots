@@ -217,7 +217,7 @@ for(int row = 0; row < rows; row++){
     unsigned int zone3Count = 1;
     unsigned int zone4Count = 1;
     int pixel;
-    int startRow = rows * 1/3;
+    int startRow = 0;
     
     for(int row = startRow; row < rows; row++){
         for(int col = 0; col < cols; col++){
@@ -302,13 +302,13 @@ for(int row = 0; row < rows; row++){
 
     // Drawing obstacle zones border lines 
     // Zone 0 far left 
-    //line(obstacleImage, Point(zone0End, 0), Point(zone0End, rows-1), Scalar(255), 1);
+    line(obstacleImage, Point(zone0End, 0), Point(zone0End, rows-1), Scalar(255), 1);
     // Zone 1 mid left
-    //line(obstacleImage, Point(zone1End, 0), Point(zone1End, rows-1), Scalar(255), 1);
+    line(obstacleImage, Point(zone1End, 0), Point(zone1End, rows-1), Scalar(255), 1);
     // Zone 2 middle
-    //line(obstacleImage, Point(zone2End, 0), Point(zone2End, rows-1), Scalar(255), 1);
+    line(obstacleImage, Point(zone2End, 0), Point(zone2End, rows-1), Scalar(255), 1);
     // Zone 3 mid right
-    //line(obstacleImage, Point(zone3End, 0), Point(zone3End, rows-1), Scalar(255), 1);
+    line(obstacleImage, Point(zone3End, 0), Point(zone3End, rows-1), Scalar(255), 1);
     // Zone 4 far right
     // End of zone 4 is the edge of the image so no border line is necessary
 
