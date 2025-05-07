@@ -53,8 +53,8 @@ void drive(int theta, bool dir, int spd){
   } else if(theta > 155){
     theta = 155;
   }
-  if(spd > 128){
-    spd = 128;
+  if(spd > 80){
+    spd = 80;
   }
   currSpd = spd;
 
@@ -138,16 +138,16 @@ void maneuver(int choice){
     // Back up to turn right
     stop();
     delay(1000);
-    drive(90, true, 128);
+    drive(90, true, 80);
     delay(2000);
-    drive(110, false, 128);
+    drive(110, false, 80);
     delay(2000);
-    drive(90, true, 128);
+    drive(90, true, 80);
     delay(2000);
-    drive(70, false, 128);
+    drive(70, false, 80);
     delay(2000);
     stop();
-    drive(90, true, 128);
+    drive(90, true, 80);
     delay(2000);
     stop();
     
@@ -155,16 +155,16 @@ void maneuver(int choice){
     // Back up to turn left
     stop();
     delay(1000);
-    drive(90, true, 128);
+    drive(90, true, 80);
     delay(2000);
-    drive(70, false, 128);
+    drive(70, false, 80);
     delay(2000);
-    drive(90, true, 128);
+    drive(90, true, 80);
     delay(2000);
-    drive(110, false, 128);
+    drive(110, false, 80);
     delay(2000);
     stop();
-    drive(90, true, 128);
+    drive(90, true, 80);
     delay(2000);
     stop();
   } else {
