@@ -5,7 +5,7 @@
 #include <limits.h>
 
 __global__ void stereoKernel(unsigned char* left, unsigned char* right, 
-                            unsigned char* disparity, double maxDistance,
+                            unsigned char* disparity, double maxDisparity,
                             int rows, int cols){
 
     
@@ -54,7 +54,7 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     if(contrast < contrastThreshold) return;
 
     // Compute sum of squred differences each shifted window
-    for(int k=0; k<maxDistance;k += disparityStep){
+    for(int k=0; k<maxDisparity;k += disparityStep){
         sumSqDiff=0.0;
         for(int i = -halfWindow; i<halfWindow+1;i += windowStep){
             for(int j = -halfWindow; j<halfWindow+1;j += windowStep){
@@ -78,7 +78,7 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
 
     /*
     // Replace SSD with NCC for better matching
-for (int k = 0; k < maxDistance; k += disparityStep) {
+for (int k = 0; k < maxDisparity; k += disparityStep) {
     double sumLeft = 0.0, sumRight = 0.0, sumLeftSq = 0.0, sumRightSq = 0.0, sumProduct = 0.0;
     int count = 0;
 

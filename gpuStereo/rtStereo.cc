@@ -93,7 +93,7 @@ int main(int argc, char** argv) {
 // Dispaly Parameters
 int fps = 60; // in frames per sec
 int frameDelay = 1000/(2*fps); // in millisec 
-double maxDistance = 250.0; // mm
+double maxDistance = 1000.0; // mm
 double maxDisparity = 64; // pixels
 int rows  = 480;
 int cols  = 640;
@@ -196,7 +196,7 @@ for(int row = 0; row < rows; row++){
 
 
     // Compute depth image using GPU
-    stereoDepth(&rectifiedLeft, &rectifiedRight, &depthImage, maxDistance, rows, cols);
+    stereoDepth(&rectifiedLeft, &rectifiedRight, &depthImage, maxDisparity, rows, cols);
     // Compute obstacles image using GPU
     stereoObstacles(&depthImage, &obstacleImage, maxDistance, rows, cols);
 

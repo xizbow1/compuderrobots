@@ -14,7 +14,7 @@
 using namespace cv;
 using namespace std;
 
-void stereoDepth(Mat* left, Mat* right, Mat* depth, double maxDistance, int rows, int cols) {
+void stereoDepth(Mat* left, Mat* right, Mat* depth, double maxDisparity, int rows, int cols) {
 
     int BLOCK_SIZE = 16; // use square blocks
     dim3 block(BLOCK_SIZE, BLOCK_SIZE);
@@ -31,7 +31,7 @@ void stereoDepth(Mat* left, Mat* right, Mat* depth, double maxDistance, int rows
     cudaMemcpy(d_right,right->data,cols * rows * sizeof(uchar), cudaMemcpyHostToDevice);
 
     // Launch kernel
-    stereoKernel<<<grid, block>>>(d_left, d_right, d_depth, maxDistance, rows, cols);
+    stereoKernel<<<grid, block>>>(d_left, d_right, d_depth, maxDisparity, rows, cols);
     cudaDeviceSynchronize();
 
     // Copy back the disparity map
