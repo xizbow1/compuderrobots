@@ -51,10 +51,10 @@ void dodgeObstacles(int zone0Count, int zone1Count, int zone2Count, int zone3Cou
     // zone0 - zone1 - zone2 - zone3 - zone4
     if(zone1Clear && zone2Clear && zone3Clear){
         strCmd = "STR090\n";
-        moveCmd = "BWD080\n";
+        moveCmd = "FWD080\n";
     }
     if(!zone0Clear && !zone1Clear && !zone2Clear && !zone3Clear && !zone4Clear){
-        strCmd = "STR90\n";
+        strCmd = "STR090\n";
         moveCmd = "BWD080\n";
     }
     if(!zone1Clear && !zone2Clear && !zone3Clear && zone0Clear){
