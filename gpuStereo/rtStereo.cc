@@ -25,6 +25,69 @@ void intHandler(int sig){
     printf("\nStopping robot and exiting...\n");
 }
 
+void dodgeObstacles(int zone0Count, int zone1Count, int zone2Count, int zone3Count, int zone4Count, int portID){
+    bool zone0Clear = true;
+    bool zone1Clear = true;
+    bool zone2Clear = true;
+    bool zone3Clear = true;
+    bool zone4Clear = true;
+    const char* strCmd;
+    const char* moveCmd;
+    int bytesWritten;
+    int obstacleThreshold = 2000;
+
+    // Determine if zone count is above threshold
+    if(zone0Count > obstacleThreshold) zone0Clear = false;
+    else zone0Clear = true;
+    if(zone1Count > obstacleThreshold) zone1Clear = false;
+    else zone1Clear = true;
+    if(zone2Count > obstacleThreshold) zone2Clear = false;
+    else zone2Clear = true;
+    if(zone3Count > obstacleThreshold) zone3Clear = false;
+    else zone3Clear = true;
+    if(zone4Count > obstacleThreshold) zone4Clear = false;
+    else zone4Clear = true;
+    
+    // zone0 - zone1 - zone2 - zone3 - zone4
+    if(zone1Clear && zone2Clear && zone3Clear){
+        strCmd = "STR090\n";
+        moveCmd = "BWD080\n";
+    }
+    if(!zone0Clear && !zone1Clear && !zone2Clear && !zone3Clear && !zone4Clear){
+        strCmd = "STR90\n";
+        moveCmd = "BWD080\n";
+    }
+    if(!zone1Clear && !zone2Clear && !zone3Clear && zone0Clear){
+        strCmd = "STR110\n";
+        moveCmd = "BWD080\n";
+    }
+    if(!zone1Clear && !zone2Clear && !zone3Clear && zone4Clear){
+        strCmd = "STR070\n";
+        moveCmd = "BWD080\n";
+    }
+    if(!zone1Clear && !zone2Clear && zone3Clear){
+        strCmd = "STR120\n";
+        moveCmd = "FWD080\n";
+    }
+    if(zone1Clear && !zone2Clear && !zone3Clear){
+        strCmd = "STR060\n";
+        moveCmd = "FWD080\n";
+    }
+    if(!zone0Clear && zone1Clear){
+        strCmd = "STR080\n";
+        moveCmd = "FWD080";
+    }
+    if(!zone4Clear && zone3Clear){
+        strCmd = "STR100\n";
+        moveCmd = "FWD080\n";
+    }
+    
+    // Write to serial port the driving commands
+    printf("STR: %s, Move: %s\n", strCmd, moveCmd);
+    bytesWritten = serialPortWrite(moveCmd,portID);
+    bytesWritten = serialPortWrite(strCmd,portID);
+}
+
 int main(int argc, char** argv) {
 
 // Dispaly Parameters
@@ -295,65 +358,3 @@ for(int row = 0; row < rows; row++){
     return 0;
 }
 
-void dodgeObstacles(int zone0Count, int zone1Count, int zone2Count, int zone3Count, int zone4Count, int portID){
-    bool zone0Clear = true;
-    bool zone1Clear = true;
-    bool zone2Clear = true;
-    bool zone3Clear = true;
-    bool zone4Clear = true;
-    const char* strCmd;
-    const char* moveCmd;
-    int bytesWritten;
-    int obstacleThreshold = 2000;
-
-    // Determine if zone count is above threshold
-    if(zone0Count > obstacleThreshold) zone0Clear = false;
-    else zone0Clear = true;
-    if(zone1Count > obstacleThreshold) zone1Clear = false;
-    else zone1Clear = true;
-    if(zone2Count > obstacleThreshold) zone2Clear = false;
-    else zone2Clear = true;
-    if(zone3Count > obstacleThreshold) zone3Clear = false;
-    else zone3Clear = true;
-    if(zone4Count > obstacleThreshold) zone4Clear = false;
-    else zone4Clear = true;
-    
-    // zone0 - zone1 - zone2 - zone3 - zone4
-    if(zone1Clear && zone2Clear && zone3Clear){
-        strCmd = "STR090\n";
-        moveCmd = "BWD080\n";
-    }
-    if(!zone0Clear && !zone1Clear && !zone2Clear && !zone3Clear && !zone4Clear){
-        strCmd = "STR90\n";
-        moveCmd = "BWD080\n";
-    }
-    if(!zone1Clear && !zone2Clear && !zone3Clear && zone0Clear){
-        strCmd = "STR110\n";
-        moveCmd = "BWD080\n";
-    }
-    if(!zone1Clear && !zone2Clear && !zone3Clear && zone4Clear){
-        strCmd = "STR070\n";
-        moveCmd = "BWD080\n";
-    }
-    if(!zone1Clear && !zone2Clear && zone3Clear){
-        strCmd = "STR120\n";
-        moveCmd = "FWD080\n";
-    }
-    if(zone1Clear && !zone2Clear && !zone3Clear){
-        strCmd = "STR060\n";
-        moveCmd = "FWD080\n";
-    }
-    if(!zone0Clear && zone1Clear){
-        strCmd = "STR080\n";
-        moveCmd = "FWD080";
-    }
-    if(!zone4Clear && zone3Clear){
-        strCmd = "STR100\n";
-        moveCmd = "FWD080\n";
-    }
-    
-    // Write to serial port the driving commands
-    printf("STR: %s, Move: %s\n", strCmd, moveCmd);
-    bytesWritten = serialPortWrite(moveCmd,portID);
-    bytesWritten = serialPortWrite(strCmd,portID);
-}
