@@ -93,7 +93,7 @@ int main(int argc, char** argv) {
 // Dispaly Parameters
 int fps = 30; // in frames per sec
 int frameDelay = 1000/(2*fps); // in millisec 
-double maxDistance = 750.0; // mm
+double maxDistance = 1000.0; // mm
 int rows  = 480;
 int cols  = 640;
 Mat depthImage = Mat::zeros(rows,cols, CV_8UC1);
@@ -103,8 +103,8 @@ Mat depthImage = Mat::zeros(rows,cols, CV_8UC1);
 const int cmdLength = 7;
 char cmd[cmdLength];
 int bytesWritten;
-const char* strCmd;
-const char* moveCmd;
+char* strCmd;
+char* moveCmd;
 
 portID = serialPortOpen();
 if(portID<0){
@@ -269,12 +269,12 @@ for(int row = 0; row < rows; row++){
         moveCmd = "FWD090\n";
     }
     if(zone0Clear && zone1Clear && !zone2Clear){
-        strCmd = "STR070";
-        moveCmd = "FWD090";
+        strCmd = "STR070\n";
+        moveCmd = "FWD090\n";
     }
     if(!zone2Clear && zone3Clear && zone4Clear){
-        strCmd = "STR110";
-        moveCmd = "FWD090";
+        strCmd = "STR110\n";
+        moveCmd = "FWD090\n";
     }
     if(!zone0Clear && !zone1Clear && !zone2Clear && !zone3Clear && !zone4Clear){
         strCmd = "STR090\n";
