@@ -93,7 +93,7 @@ int main(int argc, char** argv) {
 // Dispaly Parameters
 int fps = 30; // in frames per sec
 int frameDelay = 1000/(2*fps); // in millisec 
-double maxDistance = 1000.0; // mm
+double maxDistance = 2000.0; // mm
 int rows  = 480;
 int cols  = 640;
 Mat depthImage = Mat::zeros(rows,cols, CV_8UC1);
@@ -119,7 +119,7 @@ int zone1End = 2*(cols/6);
 int zone2End = 4*(cols/6);
 int zone3End = 5*(cols/6);
 int zone4End = cols;
-unsigned int obstacleThreshold = 1500;
+unsigned int obstacleThreshold = 2500;
 
 //Read rectification lookup tables
 Mat map1x,map1y,map2x,map2y;
