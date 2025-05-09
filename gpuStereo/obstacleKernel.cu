@@ -36,7 +36,7 @@ __global__ void obstacleKernel(const unsigned char* disparity,
     if (z > 0 && z < maxDistance) {
         distance = baseline*fx/z;
     } else {
-        distance = 0; // Mark as out of range
+        distance = maxDistance + 1; // Mark as out of range
     }
     /*
         if(z > 0) distance = (baseline * fx) / z;
