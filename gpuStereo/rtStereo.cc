@@ -119,7 +119,7 @@ int zone1End = 2*(cols/6);
 int zone2End = 4*(cols/6);
 int zone3End = 5*(cols/6);
 int zone4End = cols;
-unsigned int obstacleThreshold = 1500;
+unsigned int obstacleThreshold = 2000;
 
 //Read rectification lookup tables
 Mat map1x,map1y,map2x,map2y;
