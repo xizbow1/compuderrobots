@@ -34,7 +34,7 @@ void dodgeObstacles(unsigned int zone0Count, unsigned int zone1Count, unsigned i
     const char* strCmd;
     const char* moveCmd;
     int bytesWritten;
-    int obstacleThreshold = 2500;
+    int obstacleThreshold = 2000;
 
     // Determine if zone count is above threshold
     if(zone0Count > obstacleThreshold) zone0Clear = false;
@@ -93,7 +93,7 @@ int main(int argc, char** argv) {
 // Dispaly Parameters
 int fps = 30; // in frames per sec
 int frameDelay = 1000/(2*fps); // in millisec 
-double maxDistance = 1000.0; // mm
+double maxDistance = 750.0; // mm
 int rows  = 480;
 int cols  = 640;
 Mat depthImage = Mat::zeros(rows,cols, CV_8UC1);
