@@ -34,7 +34,7 @@ void dodgeObstacles(unsigned int zone0Count, unsigned int zone1Count, unsigned i
     const char* strCmd;
     const char* moveCmd;
     int bytesWritten;
-    int obstacleThreshold = 2000;
+    int obstacleThreshold = 2500;
 
     // Determine if zone count is above threshold
     if(zone0Count > obstacleThreshold) zone0Clear = false;
