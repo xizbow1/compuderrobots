@@ -268,6 +268,14 @@ for(int row = 0; row < rows; row++){
         strCmd = "STR090\n";
         moveCmd = "FWD090\n";
     }
+    if(zone0Clear && zone1Clear && !zone2Clear){
+        strCmd = "STR070";
+        moveCmd = "FWD090";
+    }
+    if(!zone2Clear && zone3CLear && zone4Clear){
+        strCmd = "STR110";
+        moveCmd = "FWD090";
+    }
     if(!zone0Clear && !zone1Clear && !zone2Clear && !zone3Clear && !zone4Clear){
         strCmd = "STR090\n";
         moveCmd = "BWD090\n";
@@ -296,6 +304,7 @@ for(int row = 0; row < rows; row++){
         strCmd = "STR080\n";
         moveCmd = "FWD090\n";
     }
+
 
     // Write to serial port the driving commands
     printf("STR: %s, Move: %s\n", strCmd, moveCmd);
