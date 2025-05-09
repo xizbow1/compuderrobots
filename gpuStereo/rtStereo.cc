@@ -272,7 +272,7 @@ for(int row = 0; row < rows; row++){
         strCmd = "STR070";
         moveCmd = "FWD090";
     }
-    if(!zone2Clear && zone3CLear && zone4Clear){
+    if(!zone2Clear && zone3Clear && zone4Clear){
         strCmd = "STR110";
         moveCmd = "FWD090";
     }
