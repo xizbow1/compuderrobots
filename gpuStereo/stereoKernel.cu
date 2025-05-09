@@ -5,7 +5,7 @@
 #include <limits.h>
 
 __global__ void stereoKernel(unsigned char* left, unsigned char* right, 
-                            unsigned char* disparity, double maxDistance,                            ,
+                            unsigned char* disparity, double maxDistance,
                             int rows, int cols){
 
     
