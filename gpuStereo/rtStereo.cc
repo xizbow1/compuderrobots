@@ -325,8 +325,8 @@ for(int row = 0; row < rows; row++){
     // Display obstacle map
     imshow("Obstacles",obstacleImage);
     // Dispaly rectified images 
-    hconcat(rectifiedLeft, rectifiedRight,both);
-    imshow("Left and Right",both);
+    //hconcat(rectifiedLeft, rectifiedRight,both);
+    //imshow("Left and Right",both);
   
     // Pause
     waitKey(frameDelay);
