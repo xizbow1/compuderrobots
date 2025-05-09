@@ -13,7 +13,7 @@ __global__ void stereoKernel(unsigned char* left, unsigned char* right,
 int col = blockIdx.x*blockDim.x + threadIdx.x;
 int row = blockIdx.y*blockDim.y + threadIdx.y;
 
-    const int windowWidth = 7; //must be odd
+    const int windowWidth = 3; //must be odd
     const int halfWindow = (windowWidth-1)/2;
     int disparityStep = 2;
     int windowStep = 2;
