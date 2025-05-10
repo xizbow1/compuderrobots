@@ -19,14 +19,14 @@ __global__ void obstacleKernel(const unsigned char* disparity,
 
     //left camera parameters
     double baseline = 60.0;
-    double fx = 543.072;
+    double fx = 543;
     double ox = 317.872;
     double fy = 721.241;
     double oy = 228.513;
     unsigned char pixel;
     double disparityChange = 0.0;
 
-    printf("max distance: %f\n", maxDistance);
+    //printf("max distance: %f\n", maxDistance);
     pixel = disparity[row * cols + col];
 
     double z = (double) pixel;
