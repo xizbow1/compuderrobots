@@ -8,6 +8,6 @@ using namespace cv;
 using namespace std;
 
 __global__ void stereoKernel(unsigned char* left, unsigned char* right,
-                              char* depth, double maxDistance, 
+                              unsigned char* depth, double maxDistance, 
                               int rows, int cols);
 

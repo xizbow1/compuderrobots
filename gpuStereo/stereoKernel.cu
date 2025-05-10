@@ -86,7 +86,7 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
 
     if (disp < 0) disp = 0;
     if (disp > maxDisparity) disp = maxDisparity;
-    disparity[row * cols + col] = (unsigned char)(disp);
+    disparity[row * cols + col] = disp;
 
 
 
