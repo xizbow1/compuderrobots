@@ -17,7 +17,7 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     const int halfWindow = (windowWidth-1)/2;
     int disparityStep = 2;
     int windowStep = 2;
-    double maxDisparity = 128.0;
+    double maxDisparity = 64.0;
     double contrast;
     double contrastThreshold = 12;
     
@@ -39,6 +39,8 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     // if contrast too low return
     minIntensity = (double)(left[row*cols+col]);
     maxIntensity = minIntensity;
+
+    printf("distance: %f\n", maxDistance);
 
     // Compute the sums within the windowsin each image
     for(int i = -halfWindow; i < halfWindow + 1; i++){
@@ -72,9 +74,13 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
             minSumSqDiff = sumSqDiff;
             disp = (unsigned char)k;
         }
+
+        
     }
 
-    disparity[row*cols+col] = disp;
+    if (disp < 0) disp = 0;
+    if (disp > maxDisparity) disp = maxDisparity;
+    disparity[row * cols + col] = (unsigned char)(disp);
 
     /*
     // Replace SSD with NCC for better matching

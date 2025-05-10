@@ -44,8 +44,8 @@ __global__ void obstacleKernel(const unsigned char* disparity,
     
 
 
-    if(distance < maxDistance){
-        printf("distance: %f\n", distance);
+    if(distance > 0.0 && distance < maxDistance){
+        //printf("distance: %f\n", distance);
         obstacles[row * cols + col] = (unsigned char)(255);
     } else {
         obstacles[row * cols + col] = (unsigned char)(0);
