@@ -44,16 +44,19 @@ __global__ void obstacleKernel(const unsigned char* disparity,
     } else distance = maxDistance + 1;
 
     if(distance > maxZ || fabs(x) > maxX || y < minY || y > maxY){
-        obstacles[row * cols + col] = 0;
+        obstacles[row * cols + col] = (unsigned char)(0);
         return;
+    } else {
+        obstacles[row * cols + col] = (unsigned char)(255);
     }
-
+    /*
     if(distance > 0.0 && distance < maxDistance){
         printf("distance: %f\n", distance);
         obstacles[row * cols + col] = (unsigned char)(255);
     } else {
         obstacles[row * cols + col] = (unsigned char)(0);
     }
+    */
 
 /*
     double disp = (double)disparity[row*cols + col];
