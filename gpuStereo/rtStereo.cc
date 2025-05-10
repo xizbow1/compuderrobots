@@ -136,7 +136,7 @@ if( map2x.empty()) cout << "Empty 2x lookup table"<<endl;
 if( map2y.empty()) cout << "Empty 2y lookup table"<<endl;
 
 //correct any remaining alignment errors
-float offset = 14.0;
+float offset = 15.0;
 float currentRow;
 for(int row = 0; row < rows; row++){
     for(int col = 0; col < cols; col++){
@@ -327,10 +327,10 @@ for(int row = 0; row < rows; row++){
     Mat medianDepth, filteredDepth, medianObstacles;
     medianBlur(depthImage, medianDepth, 5);
     //medianBlur(obstacleImage, medianObstacles, 5);
-    //GaussianBlur(medianDepth, filteredDepth, Size(5,5), 0);
+    GaussianBlur(medianDepth, filteredDepth, Size(5,5), 0);
 
     // Display depth map
-    imshow("Depth", medianDepth);
+    imshow("Depth", filteredDepth);
     // Display obstacle map
     imshow("Obstacles",obstacleImage);
     // Dispaly rectified images 
