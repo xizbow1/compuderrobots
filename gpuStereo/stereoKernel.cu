@@ -15,11 +15,12 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
 
     const int windowWidth = 3; //must be odd
     const int halfWindow = (windowWidth-1)/2;
-    int disparityStep = 2;
-    int windowStep = 2;
+    int disparityStep = 1;
+    int windowStep = 1;
+    double minDisparity = 0.0;
     double maxDisparity = 64.0;
     double contrast;
-    double contrastThreshold = 12;
+    double contrastThreshold = 15;
     
     unsigned char leftPixel;
     unsigned char rightPixel;
