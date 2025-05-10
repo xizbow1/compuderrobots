@@ -219,7 +219,7 @@ for(int row = 0; row < rows; row++){
     unsigned int zone3Count = 1;
     unsigned int zone4Count = 1;
     int pixel;
-    int startRow = rows * 1/3;
+    int startRow =0;
     
     for(int row = startRow; row < rows; row++){
         for(int col = 0; col < cols; col++){

@@ -28,9 +28,7 @@ __global__ void obstacleKernel(const unsigned char* disparity,
 
     //printf("max distance: %f\n", maxDistance);
     pixel = disparity[row * cols + col];
-
     double z = (double) pixel;
-
     double distance;
 
     /*
