@@ -39,8 +39,8 @@ __global__ void obstacleKernel(const unsigned char* disparity,
     }
     */
     if(z > 0){
-        printf("distance: %f\n", distance);
         distance = baseline * fx / z;
+        printf("distance: %f\n", distance);
     } else distance = maxDistance + 1;
     
 
