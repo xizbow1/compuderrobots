@@ -6,7 +6,7 @@
 #include "stereoObstacles.h"
 
 // The actual CUDA kernel for obstacle detection
-__global__ void obstacleKernel(unsigned char* disparity,
+__global__ void obstacleKernel(const unsigned char* disparity,
                                       unsigned char* obstacles,
                                       double maxDistance,
                                       int rows, int cols)
@@ -41,7 +41,7 @@ __global__ void obstacleKernel(unsigned char* disparity,
     if(z > 0){
         distance = baseline * fx / z;
         //printf("distance: %f\n", distance);
-    } else distance = 0.0;
+    } else distance = maxDistance + 1;
 
     if(distance > maxZ || fabs(x) > maxX || y < minY || y > maxY){
         obstacles[row * cols + col] = (unsigned char)(0);
