@@ -24,7 +24,7 @@ void intHandler(int sig){
     exitRequested = true; // Set flag instead of exiting immediately
     printf("\nStopping robot and exiting...\n");
 }
-
+/*
 void dodgeObstacles(unsigned int zone0Count, unsigned int zone1Count, unsigned int zone2Count, unsigned int zone3Count, unsigned int zone4Count, unsigned int portID){
     bool zone0Clear = true;
     bool zone1Clear = true;
@@ -87,7 +87,7 @@ void dodgeObstacles(unsigned int zone0Count, unsigned int zone1Count, unsigned i
     bytesWritten = serialPortWrite(moveCmd,portID);
     bytesWritten = serialPortWrite(strCmd,portID);
 }
-
+*/
 int main(int argc, char** argv) {
 
 // Dispaly Parameters
