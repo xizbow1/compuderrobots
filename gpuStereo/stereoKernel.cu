@@ -32,7 +32,6 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     double diff;
     double intensity, minIntensity, maxIntensity;
 
-
     if(row < halfWindow || row > rows-halfWindow || col < maxDisparity ||
         col < halfWindow || col > cols - halfWindow){
             disparity[row*cols+col] = 0;
