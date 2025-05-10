@@ -19,7 +19,7 @@ __global__ void obstacleKernel(const unsigned char* disparity,
 
     //left camera parameters
     double baseline = 60.0;
-    double fx = 543.072;
+    double fx = 543.0724862472363;
     double ox = 317.872;
     double fy = 721.241;
     double oy = 228.513;

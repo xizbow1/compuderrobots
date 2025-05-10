@@ -18,7 +18,7 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     int disparityStep = 1;
     int windowStep = 1;
     double minDisparity = 0.0;
-    double maxDisparity = 128.0;
+    double maxDisparity = 64.0;
     double contrast;
     double contrastThreshold = 9;
     
