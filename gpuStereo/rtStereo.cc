@@ -193,9 +193,17 @@ for(int row = 0; row < rows; row++){
     remap(leftFrame, rectifiedLeft, map1x, map1y, INTER_LINEAR);
     remap(rightFrame, rectifiedRight, map2x, map2y, INTER_LINEAR);
 
+    
+
 
     // Compute depth image using GPU
     stereoDepth(&rectifiedLeft, &rectifiedRight, &depthImage, maxDistance, rows, cols);
+
+    //Smoothing depth image
+    Mat medianDepth, filteredDepth, medianObstacles;
+    medianBlur(depthImage, medianDepth, 5);
+    //medianBlur(obstacleImage, medianObstacles, 5);
+    GaussianBlur(medianDepth, filteredDepth, Size(5,5), 0);
 
     // Compute obstacles image using GPU
     stereoObstacles(&depthImage, &obstacleImage, maxDistance, rows, cols);
@@ -323,11 +331,6 @@ for(int row = 0; row < rows; row++){
     // Zone 4 far right
     // End of zone 4 is the edge of the image so no border line is necessary
 
-    //Smoothing depth image
-    Mat medianDepth, filteredDepth, medianObstacles;
-    medianBlur(depthImage, medianDepth, 5);
-    //medianBlur(obstacleImage, medianObstacles, 5);
-    GaussianBlur(medianDepth, filteredDepth, Size(5,5), 0);
 
     // Display depth map
     imshow("Depth", filteredDepth);
