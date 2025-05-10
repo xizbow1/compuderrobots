@@ -205,9 +205,6 @@ for(int row = 0; row < rows; row++){
     // Compute obstacles image using GPU
     stereoObstacles(&depthImage, &obstacleImage, maxDistance, rows, cols);
 
-    
-
-
     // Zones are split from left to right 0 - 4
     // On the robot left to right will be reversed
     // The robot's right will be zone 0
@@ -318,13 +315,13 @@ for(int row = 0; row < rows; row++){
 
     // Drawing obstacle zones border lines 
     // Zone 0 far left 
-    line(obstacleImage, Point(zone0End, 0), Point(zone0End, rows-1), Scalar(255), 1);
+    //line(obstacleImage, Point(zone0End, 0), Point(zone0End, rows-1), Scalar(255), 1);
     // Zone 1 mid left
-    line(obstacleImage, Point(zone1End, 0), Point(zone1End, rows-1), Scalar(255), 1);
+    //line(obstacleImage, Point(zone1End, 0), Point(zone1End, rows-1), Scalar(255), 1);
     // Zone 2 middle
-    line(obstacleImage, Point(zone2End, 0), Point(zone2End, rows-1), Scalar(255), 1);
+    //line(obstacleImage, Point(zone2End, 0), Point(zone2End, rows-1), Scalar(255), 1);
     // Zone 3 mid right
-    line(obstacleImage, Point(zone3End, 0), Point(zone3End, rows-1), Scalar(255), 1);
+    //line(obstacleImage, Point(zone3End, 0), Point(zone3End, rows-1), Scalar(255), 1);
     // Zone 4 far right
     // End of zone 4 is the edge of the image so no border line is necessary
 
