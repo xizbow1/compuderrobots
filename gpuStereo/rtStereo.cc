@@ -34,7 +34,7 @@ void dodgeObstacles(unsigned int zone0Count, unsigned int zone1Count, unsigned i
     const char* strCmd;
     const char* moveCmd;
     int bytesWritten;
-    int obstacleThreshold = 3000;
+    int obstacleThreshold = 5000;
 
     // Determine if zone count is above threshold
     if(zone0Count > obstacleThreshold) zone0Clear = false;
@@ -103,8 +103,8 @@ Mat depthImage = Mat::zeros(rows,cols, CV_8UC1);
 const int cmdLength = 7;
 char cmd[cmdLength];
 int bytesWritten;
-char* strCmd;
-char* moveCmd;
+const char* strCmd;
+const char* moveCmd;
 
 portID = serialPortOpen();
 if(portID<0){
