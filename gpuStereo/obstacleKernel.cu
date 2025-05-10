@@ -38,8 +38,10 @@ __global__ void obstacleKernel(const unsigned char* disparity,
         distance = maxDistance + 1; // Mark as out of range
     }
     */
-    if(z > 0) distance = baseline * fx / z;
-    else distance = maxDistance + 1;
+    if(z > 0){
+        printf("distance: %f\n", distance);
+        distance = baseline * fx / z;
+    } else distance = maxDistance + 1;
     
 
 
