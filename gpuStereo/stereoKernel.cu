@@ -33,8 +33,11 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     double intensity, minIntensity, maxIntensity;
 
 
-    if(row < halfWindow || row > rows-halfWindow ||
-        col < halfWindow || col > cols - halfWindow) return;
+    if(row < halfWindow || row > rows-halfWindow || col < maxDisparity ||
+        col < halfWindow || col > cols - halfWindow){
+            disparity[row*cols+col] = 0;
+            return;
+        } 
 
     // Compute the contrast for left window
     // if contrast too low return
@@ -54,7 +57,10 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
 
     // Ignore any contrast below the threshold
     contrast = maxIntensity - minIntensity;
-    if(contrast < contrastThreshold) return;
+    if(contrast < contrastThreshold){
+        disparity[row*cols+col] = 0;
+        return;
+    }
 
     // Compute sum of squred differences each shifted window
     for(int k=0; k < maxDisparity; k+=disparityStep){

@@ -193,9 +193,6 @@ for(int row = 0; row < rows; row++){
     remap(leftFrame, rectifiedLeft, map1x, map1y, INTER_LINEAR);
     remap(rightFrame, rectifiedRight, map2x, map2y, INTER_LINEAR);
 
-    
-
-
     // Compute depth image using GPU
     stereoDepth(&rectifiedLeft, &rectifiedRight, &depthImage, maxDistance, rows, cols);
 
