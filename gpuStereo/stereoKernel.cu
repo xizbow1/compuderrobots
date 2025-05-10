@@ -18,9 +18,9 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     int disparityStep = 1;
     int windowStep = 1;
     double minDisparity = 0.0;
-    double maxDisparity = 32.0;
+    double maxDisparity = 56.0;
     double contrast;
-    double contrastThreshold = 20;
+    double contrastThreshold = 18;
     
     unsigned char leftPixel;
     unsigned char rightPixel;
@@ -41,7 +41,7 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     minIntensity = (double)(left[row*cols+col]);
     maxIntensity = minIntensity;
 
-    printf("distance: %f\n", maxDistance);
+    //printf("distance: %f\n", maxDistance);
 
     // Compute the sums within the windowsin each image
     for(int i = -halfWindow; i < halfWindow + 1; i++){
@@ -80,7 +80,7 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     }
 
     if (disp < 0) disp = 0;
-    if (disp > maxDisparity) disp = maxDisparity;
+    if (disp > maxDisparity) disp = 0;
     disparity[row * cols + col] = (unsigned char)(disp);
 
     /*
