@@ -20,7 +20,7 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     double minDisparity = 0.0;
     double maxDisparity = 128.0;
     double contrast;
-    double contrastThreshold = 9;
+    double contrastThreshold = 20;
     
     unsigned char leftPixel;
     unsigned char rightPixel;
