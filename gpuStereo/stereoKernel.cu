@@ -13,7 +13,7 @@ __global__ void stereoKernel(unsigned char* left, unsigned char* right,
 int col = blockIdx.x*blockDim.x + threadIdx.x;
 int row = blockIdx.y*blockDim.y + threadIdx.y;
 
-    const int windowWidth = 13; //must be odd
+    const int windowWidth = 3; //must be odd
     const int halfWindow = (windowWidth-1)/2;
     int disparityStep = 2;
     int windowStep = 2;
@@ -61,7 +61,7 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
         disparity[row*cols+col] = 0;
         return;
     }
-
+/*
     // Compute sum of squred differences each shifted window
     for(int k=0; k < maxDisparity; k+=disparityStep){
         sumSqDiff=0.0;
@@ -89,14 +89,11 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
     if (disp > maxDisparity) disp = maxDisparity;
     disparity[row * cols + col] = disp;
 
+*/
 
 
-
-
-    /*
     // Replace SSD with NCC for better matching
-for (int k = 0; k < maxDistance
-; k += disparityStep) {
+for (int k = 0; k < maxDisparity; k += disparityStep) {
     double sumLeft = 0.0, sumRight = 0.0, sumLeftSq = 0.0, sumRightSq = 0.0, sumProduct = 0.0;
     int count = 0;
 
@@ -132,6 +129,5 @@ for (int k = 0; k < maxDistance
     }
         disparity[row*cols+col] = (unsigned char) (disp);
 }
-    */
 
 }
