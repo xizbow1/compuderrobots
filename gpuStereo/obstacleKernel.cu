@@ -15,10 +15,6 @@ __global__ void obstacleKernel(const unsigned char* disparity,
     int row = blockIdx.y * blockDim.y + threadIdx.y;
 
     int halfWindow = 6;
-    double minY = 100.0;
-    double maxY = 1000.0;
-    double maxX = 500.0;
-    double maxZ = maxDistance;
 
     //left camera parameters
     double baseline = 60.0;
@@ -27,12 +23,18 @@ __global__ void obstacleKernel(const unsigned char* disparity,
     double fy = 721.241;
     double oy = 228.513;
     unsigned char pixel;
+    double maxDisparity = 128.0;
     double disparityChange = 0.0;
     double cameraHeight = 150.0;
+    double minY = 100.0;
+    double maxY = 1000.0;
+    double maxX = 500.0;
+    double maxZ = maxDistance;
+    double minZ = baseline*fx/maxDisparity;
     
 
     //printf("max distance: %f\n", maxDistance);
-    pixel = disparity[row * cols + col];
+    pixel = (double)disparity[row * cols + col];
     double distance;
     double z = (double) pixel;
     double x = z*(ox - (double)col)/fx;
@@ -43,7 +45,7 @@ __global__ void obstacleKernel(const unsigned char* disparity,
         //printf("distance: %f\n", distance);
     } else distance = maxDistance + 1;
 
-    if(distance > maxZ || fabs(x) > maxX || y < minY || y > maxY){
+    if(distance > maxZ || distance < minZ || fabs(x) > maxX || y < minY || y > maxY){
         obstacles[row * cols + col] = (unsigned char)(0);
         return;
     } else {
