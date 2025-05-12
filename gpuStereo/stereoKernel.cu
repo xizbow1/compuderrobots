@@ -78,7 +78,7 @@ int col = 364;
             }
         }
 
-        if(col == col1 && row == row1) printf("SqDiff: %f, %d\n", sumSqDiff, k);
+        if(col == col1 && row == row1) printf("%f\n", sumSqDiff);
         //compute min sum square diff
         if(sumSqDiff < minSumSqDiff){
             minSumSqDiff = sumSqDiff;
