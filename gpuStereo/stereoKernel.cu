@@ -76,7 +76,7 @@ int row = 124;// blockIdx.y*blockDim.y + threadIdx.y;
             }
         }
 
-        printf("SqDiff: %f\n", sumSqDiff);
+        printf("SqDiff: %f, %d\n", sumSqDiff, k);
         //compute min sum square diff
         if(sumSqDiff < minSumSqDiff){
             minSumSqDiff = sumSqDiff;
