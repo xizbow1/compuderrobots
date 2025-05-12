@@ -205,13 +205,13 @@ for(int row = 0; row < rows; row++){
     // Compute obstacles image using GPU
     stereoObstacles(&filteredDepth, &obstacleImage, maxDistance, rows, cols);
     
-    medianBlur(obstacleImage, medianObstacles, 15);
-    GaussianBlur(medianObstacles, filteredObstacles, Size(5,5), 0);
+    medianBlur(obstacleImage, medianObstacles, 25);
+    //GaussianBlur(medianObstacles, filteredObstacles, Size(5,5), 0);
 
     // Display depth map
     imshow("Depth", filteredDepth);
     // Display obstacle map
-    imshow("Obstacles",filteredObstacles);
+    imshow("Obstacles",medianObstacles);
     // Dispaly rectified images 
     //hconcat(rectifiedLeft, rectifiedRight,both);
     //imshow("Left and Right",both);
@@ -236,7 +236,7 @@ for(int row = 0; row < rows; row++){
     
     for(int row = startRow; row < rows; row++){
         for(int col = 0; col < cols; col++){
-            pixel = (int)(filteredObstacles.data[row*cols+col]);
+            pixel = (int)(medianObstacles.data[row*cols+col]);
             if(col >= 0 && col < zone0End && pixel > 0) zone0Count++;           // Far Left Zone
             if(col >= zone0End && col < zone1End && pixel > 0) zone1Count++;    // Mid Left Zone
             if(col >= zone1End && col < zone2End && pixel > 0) zone2Count++;    // Middle Zone
