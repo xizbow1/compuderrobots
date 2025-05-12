@@ -203,7 +203,7 @@ for(int row = 0; row < rows; row++){
 
     // Compute obstacles image using GPU
     stereoObstacles(&filteredDepth, &obstacleImage, maxDistance, rows, cols);
-    medianBlur(obstacleImage, medianObstacles, 37);
+    medianBlur(obstacleImage, medianObstacles, 15);
     //GaussianBlur(medianObstacles, filteredObstacles, Size(5,5), 0);
 
     // Display depth map
