@@ -203,7 +203,7 @@ for(int row = 0; row < rows; row++){
     GaussianBlur(medianDepth, filteredDepth, Size(5,5), 0);
 
     // Compute obstacles image using GPU
-    stereoObstacles(&depthImage, &obstacleImage, maxDistance, rows, cols);
+    stereoObstacles(&filteredDepth, &obstacleImage, maxDistance, rows, cols);
 
     // Zones are split from left to right 0 - 4
     // On the robot left to right will be reversed
