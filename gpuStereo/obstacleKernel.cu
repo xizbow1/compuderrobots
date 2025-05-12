@@ -11,10 +11,10 @@ __global__ void obstacleKernel(const unsigned char* disparity,
                                       double maxDistance,
                                       int rows, int cols)
 {
-    //int col = blockIdx.x * blockDim.x + threadIdx.x;
-    //int row = blockIdx.y * blockDim.y + threadIdx.y;
-    int col = 364;
-    int row = 124;
+    int col = blockIdx.x * blockDim.x + threadIdx.x;
+    int row = blockIdx.y * blockDim.y + threadIdx.y;
+    //int col = 364;
+    //int row = 124;
     int halfWindow = 6;
 
     //left camera parameters

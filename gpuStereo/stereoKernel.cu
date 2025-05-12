@@ -10,10 +10,10 @@ __global__ void stereoKernel(unsigned char* left, unsigned char* right,
 
     
 // compute the row and col of the pixel to be processed
-int col1 = blockIdx.x*blockDim.x + threadIdx.x;
-int row1 = blockIdx.y*blockDim.y + threadIdx.y;
-int row = 124;
-int col = 364;
+int col = blockIdx.x*blockDim.x + threadIdx.x;
+int row = blockIdx.y*blockDim.y + threadIdx.y;
+int row1 = 124;
+int col1 = 364;
 
     const int windowWidth = 13; //must be odd
     const int halfWindow = (windowWidth-1)/2;
