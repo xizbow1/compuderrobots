@@ -309,7 +309,7 @@ for(int row = 0; row < rows; row++){
     */
 
     // Write to serial port the driving commands
-    printf("STR: %s, Move: %s\n", strCmd, moveCmd);
+    //printf("STR: %s, Move: %s\n", strCmd, moveCmd);
     bytesWritten = serialPortWrite(moveCmd,portID);
     bytesWritten = serialPortWrite(strCmd,portID);
 

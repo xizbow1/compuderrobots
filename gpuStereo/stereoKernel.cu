@@ -92,14 +92,15 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
 */
 
 
-    // Replace SSD with NCC for better matching
 for (int k = 0; k < maxDisparity; k += disparityStep) {
     double sumLeft = 0.0, sumRight = 0.0, sumLeftSq = 0.0, sumRightSq = 0.0, sumProduct = 0.0;
     int count = 0;
 
-    for (int i = -halfWindow; i < halfWindow + 1; i += windowStep) {
-        for (int j = -halfWindow; j < halfWindow + 1; j += windowStep) {
-            if (row + i < rows && col + j < cols && 0 <= col + j - k && col + j - k < cols) {
+    for (int i = -halfWindow; i <= halfWindow; i += windowStep) {
+        for (int j = -halfWindow; j <= halfWindow; j += windowStep) {
+            if (row + i >= 0 && row + i < rows &&
+                col + j >= 0 && col + j < cols &&
+                col + j - k >= 0 && col + j - k < cols) {
                 leftPixel = left[(row + i) * cols + (col + j)];
                 rightPixel = right[(row + i) * cols + (col + j - k)];
 
@@ -117,17 +118,17 @@ for (int k = 0; k < maxDisparity; k += disparityStep) {
         double meanLeft = sumLeft / count;
         double meanRight = sumRight / count;
         double numerator = sumProduct - count * meanLeft * meanRight;
-        double denominator = sqrt((sumLeftSq - count * meanLeft * meanLeft) * 
+        double denominator = sqrt((sumLeftSq - count * meanLeft * meanLeft) *
                                   (sumRightSq - count * meanRight * meanRight));
 
-        double ncc = (denominator > 0) ? numerator / denominator : 0.0;
+        double ncc = (denominator > 1e-6) ? numerator / denominator : 0.0;
 
-        if (ncc > minSumSqDiff) { // Maximize NCC instead of minimizing SSD
+        if (ncc > minSumSqDiff) { // Maximize NCC
             minSumSqDiff = ncc;
             disp = k;
-        } 
+        }
     }
-        disparity[row*cols+col] = (unsigned char) (disp);
 }
+disparity[row * cols + col] = (unsigned char)(disp);
 
 }
