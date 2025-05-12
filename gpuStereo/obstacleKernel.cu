@@ -27,25 +27,27 @@ __global__ void obstacleKernel(const unsigned char* disparity,
     double disparityChange = 0.0;
     double cameraHeight = 150.0;
     double minY = 100.0;
-    double maxY = 1000.0;
+    double maxY = 500.0;
     double maxX = 500.0;
     double maxZ = maxDistance;
     double minZ = baseline*fx/maxDisparity;
     
 
     //printf("max distance: %f\n", maxDistance);
-    pixel = (double)disparity[row * cols + col];
     double distance;
-    double z = (double) pixel;
+    double disparity = (double)disparity[row * cols + col];
+    double z = 0.0;
     double x = z*(ox - (double)col)/fx;
     double y = cameraHeight + z*((double)row - oy)/fy;
 
-    if(z > 0){
-        distance = baseline * fx / z;
+    if(disparity > 0.0){
+        z = baseline * fx / disparity;
         //printf("distance: %f\n", distance);
-    } else distance = maxDistance + 1;
+    } else {
+        z = maxDistance + 1;
+    }
 
-    if(distance > maxZ || distance < minZ || fabs(x) > maxX || y < minY || y > maxY){
+    if(z > maxZ || z < minZ || fabs(x) > maxX || y < minY || y > maxY){
         obstacles[row * cols + col] = (unsigned char)(0);
         return;
     } else {
