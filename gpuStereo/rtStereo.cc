@@ -204,7 +204,8 @@ for(int row = 0; row < rows; row++){
 
     // Compute obstacles image using GPU
     stereoObstacles(&filteredDepth, &obstacleImage, maxDistance, rows, cols);
-
+    
+    medianBlur(obstacleImage, medianObstacles, 5);
     // Zones are split from left to right 0 - 4
     // On the robot left to right will be reversed
     // The robot's right will be zone 0
@@ -329,7 +330,7 @@ for(int row = 0; row < rows; row++){
     // Display depth map
     imshow("Depth", filteredDepth);
     // Display obstacle map
-    imshow("Obstacles",obstacleImage);
+    imshow("Obstacles",medianObstacles);
     // Dispaly rectified images 
     //hconcat(rectifiedLeft, rectifiedRight,both);
     //imshow("Left and Right",both);
