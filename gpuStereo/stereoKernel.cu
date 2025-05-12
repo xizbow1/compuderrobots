@@ -89,9 +89,10 @@ int col1 = 364;
         
     }
 
-    if (disp < 0) disp = 0;
-    if (disp > maxDisparity) disp = maxDisparity;
-    disparity[row * cols + col] = disp;
+    if (disp > 50){
+        disparity[row * cols + col] = disp;
+    } else disparity[row * cols + col] = 0;
+    
 
 /*
 for (int k = 0; k < maxDisparity; k += disparityStep) {
