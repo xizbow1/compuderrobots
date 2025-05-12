@@ -227,7 +227,7 @@ for(int row = 0; row < rows; row++){
     
     for(int row = startRow; row < rows; row++){
         for(int col = 0; col < cols; col++){
-            pixel = (int)(obstacleImage.data[row*cols+col]);
+            pixel = (int)(medianObstacles.data[row*cols+col]);
             if(col >= 0 && col < zone0End && pixel > 0) zone0Count++;           // Far Left Zone
             if(col >= zone0End && col < zone1End && pixel > 0) zone1Count++;    // Mid Left Zone
             if(col >= zone1End && col < zone2End && pixel > 0) zone2Count++;    // Middle Zone
