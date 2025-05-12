@@ -198,12 +198,12 @@ for(int row = 0; row < rows; row++){
 
     //Smoothing depth image
     Mat medianDepth, filteredDepth, medianObstacles, filteredObstacles;
-    medianBlur(depthImage, medianDepth, 15);
-    GaussianBlur(medianDepth, filteredDepth, Size(15,5), 0);
+    medianBlur(depthImage, medianDepth, 55);
+    GaussianBlur(medianDepth, filteredDepth, Size(5,5), 0);
 
     // Compute obstacles image using GPU
     stereoObstacles(&filteredDepth, &obstacleImage, maxDistance, rows, cols);
-    medianBlur(obstacleImage, medianObstacles, 35);
+    medianBlur(obstacleImage, medianObstacles, 55);
     //GaussianBlur(medianObstacles, filteredObstacles, Size(5,5), 0);
 
     // Display depth map
