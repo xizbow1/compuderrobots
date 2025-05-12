@@ -17,10 +17,10 @@ int col1 = 364;
 
     const int windowWidth = 13; //must be odd
     const int halfWindow = (windowWidth-1)/2;
-    int disparityStep = 2;
-    int windowStep = 2;
+    int disparityStep = 1
+    int windowStep = 1;
     double minDisparity = 0.0;
-    double maxDisparity = 128.0;
+    double maxDisparity = 64.0;
     double contrast;
     double contrastThreshold = 20;
     
@@ -89,9 +89,11 @@ int col1 = 364;
         
     }
 
-    if (disp > 50){
+    if(disp > 0){
         disparity[row * cols + col] = disp;
-    } else disparity[row * cols + col] = 0;
+    }
+    
+
     
 
 /*
