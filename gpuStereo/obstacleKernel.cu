@@ -35,13 +35,13 @@ __global__ void obstacleKernel(const unsigned char* disparity,
 
     //printf("max distance: %f\n", maxDistance);
     double distance;
-    double disparity = (double)disparity[row * cols + col];
+    double disp = (double)disparity[row * cols + col];
     double z = 0.0;
     double x = z*(ox - (double)col)/fx;
     double y = cameraHeight + z*((double)row - oy)/fy;
 
-    if(disparity > 0.0){
-        z = baseline * fx / disparity;
+    if(disp > 0.0){
+        z = baseline * fx / disp;
         //printf("distance: %f\n", distance);
     } else {
         z = maxDistance + 1;
