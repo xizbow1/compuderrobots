@@ -197,7 +197,7 @@ for(int row = 0; row < rows; row++){
     stereoDepth(&rectifiedLeft, &rectifiedRight, &depthImage, maxDistance, rows, cols);
 
     //Smoothing depth image
-    Mat medianDepth, filteredDepth, medianObstacles;
+    Mat medianDepth, filteredDepth, medianObstacles, filteredObstacles;
     medianBlur(depthImage, medianDepth, 5);
     //medianBlur(obstacleImage, medianObstacles, 5);
     GaussianBlur(medianDepth, filteredDepth, Size(5,5), 0);
@@ -206,6 +206,7 @@ for(int row = 0; row < rows; row++){
     stereoObstacles(&filteredDepth, &obstacleImage, maxDistance, rows, cols);
     
     medianBlur(obstacleImage, medianObstacles, 5);
+    GaussianBlur(medianObstacles, filteredObstacles, Size(5,5), 0);
     // Zones are split from left to right 0 - 4
     // On the robot left to right will be reversed
     // The robot's right will be zone 0
