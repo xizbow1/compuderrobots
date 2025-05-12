@@ -205,8 +205,17 @@ for(int row = 0; row < rows; row++){
     // Compute obstacles image using GPU
     stereoObstacles(&filteredDepth, &obstacleImage, maxDistance, rows, cols);
     
-    medianBlur(obstacleImage, medianObstacles, 17);
+    medianBlur(obstacleImage, medianObstacles, 15);
     GaussianBlur(medianObstacles, filteredObstacles, Size(5,5), 0);
+
+    // Display depth map
+    imshow("Depth", filteredDepth);
+    // Display obstacle map
+    imshow("Obstacles",filteredObstacles);
+    // Dispaly rectified images 
+    //hconcat(rectifiedLeft, rectifiedRight,both);
+    //imshow("Left and Right",both);
+
     // Zones are split from left to right 0 - 4
     // On the robot left to right will be reversed
     // The robot's right will be zone 0
@@ -227,7 +236,7 @@ for(int row = 0; row < rows; row++){
     
     for(int row = startRow; row < rows; row++){
         for(int col = 0; col < cols; col++){
-            pixel = (int)(medianObstacles.data[row*cols+col]);
+            pixel = (int)(filteredObstacles.data[row*cols+col]);
             if(col >= 0 && col < zone0End && pixel > 0) zone0Count++;           // Far Left Zone
             if(col >= zone0End && col < zone1End && pixel > 0) zone1Count++;    // Mid Left Zone
             if(col >= zone1End && col < zone2End && pixel > 0) zone2Count++;    // Middle Zone
@@ -325,17 +334,7 @@ for(int row = 0; row < rows; row++){
     // Zone 3 mid right
     //line(obstacleImage, Point(zone3End, 0), Point(zone3End, rows-1), Scalar(255), 1);
     // Zone 4 far right
-    // End of zone 4 is the edge of the image so no border line is necessary
-
-
-    // Display depth map
-    imshow("Depth", filteredDepth);
-    // Display obstacle map
-    imshow("Obstacles",medianObstacles);
-    // Dispaly rectified images 
-    //hconcat(rectifiedLeft, rectifiedRight,both);
-    //imshow("Left and Right",both);
-  
+    // End of zone 4 is the edge of the image so no border line is necessary  
     // Pause
     waitKey(frameDelay);
 
