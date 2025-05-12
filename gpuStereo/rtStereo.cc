@@ -273,7 +273,7 @@ for(int row = 0; row < rows; row++){
     else zone3Clear = true;
     if(zone4Count > obstacleThreshold) zone4Clear = false;
     else zone4Clear = true;
-    /*
+    
     // zone0 - zone1 - zone2 - zone3 - zone4
     if(zone1Clear && zone2Clear && zone3Clear){
         strCmd = "STR090\n";
@@ -315,7 +315,7 @@ for(int row = 0; row < rows; row++){
         strCmd = "STR080\n";
         moveCmd = "FWD090\n";
     }
-    */
+    
 
     // Write to serial port the driving commands
     //printf("STR: %s, Move: %s\n", strCmd, moveCmd);
