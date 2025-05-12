@@ -20,7 +20,7 @@ int col1 = 364;
     int disparityStep = 1;
     int windowStep = 1;
     double minDisparity = 0.0;
-    double maxDisparity = 64.0;
+    double maxDisparity = 48.0;
     double contrast;
     double contrastThreshold = 20;
     
