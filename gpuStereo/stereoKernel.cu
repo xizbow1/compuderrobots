@@ -10,8 +10,10 @@ __global__ void stereoKernel(unsigned char* left, unsigned char* right,
 
     
 // compute the row and col of the pixel to be processed
-int col = 364;// blockIdx.x*blockDim.x + threadIdx.x;
-int row = 124;// blockIdx.y*blockDim.y + threadIdx.y;
+int col1 = blockIdx.x*blockDim.x + threadIdx.x;
+int row1 = blockIdx.y*blockDim.y + threadIdx.y;
+int row = 124;
+int col = 364;
 
     const int windowWidth = 13; //must be odd
     const int halfWindow = (windowWidth-1)/2;
@@ -63,7 +65,7 @@ int row = 124;// blockIdx.y*blockDim.y + threadIdx.y;
     }
 
     // Compute sum of squred differences each shifted window
-    for(int k=0; k < 1; k++){
+    for(int k=0; k < maxDisparity; k++){
         sumSqDiff=0.0;
         for(int i = -halfWindow; i < halfWindow+1;i+=windowStep){
             for(int j = -halfWindow; j < halfWindow+1;j+=windowStep){
@@ -76,7 +78,7 @@ int row = 124;// blockIdx.y*blockDim.y + threadIdx.y;
             }
         }
 
-        printf("SqDiff: %f, %d\n", sumSqDiff, k);
+        if(col == col1 && row == row1) printf("SqDiff: %f, %d\n", sumSqDiff, k);
         //compute min sum square diff
         if(sumSqDiff < minSumSqDiff){
             minSumSqDiff = sumSqDiff;
