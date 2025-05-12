@@ -63,7 +63,7 @@ int row = 124;// blockIdx.y*blockDim.y + threadIdx.y;
     }
 
     // Compute sum of squred differences each shifted window
-    for(int k=0; k < maxDisparity; k++){
+    for(int k=0; k < 1; k++){
         sumSqDiff=0.0;
         for(int i = -halfWindow; i < halfWindow+1;i+=windowStep){
             for(int j = -halfWindow; j < halfWindow+1;j+=windowStep){
