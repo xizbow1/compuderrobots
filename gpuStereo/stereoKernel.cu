@@ -10,8 +10,8 @@ __global__ void stereoKernel(unsigned char* left, unsigned char* right,
 
     
 // compute the row and col of the pixel to be processed
-int col = blockIdx.x*blockDim.x + threadIdx.x;
-int row = blockIdx.y*blockDim.y + threadIdx.y;
+int col = 364;// blockIdx.x*blockDim.x + threadIdx.x;
+int row = 124;// blockIdx.y*blockDim.y + threadIdx.y;
 
     const int windowWidth = 13; //must be odd
     const int halfWindow = (windowWidth-1)/2;
@@ -76,9 +76,11 @@ int row = blockIdx.y*blockDim.y + threadIdx.y;
             }
         }
 
+        printf("SqDiff: %f", sumSqDiff);
         //compute min sum square diff
         if(sumSqDiff < minSumSqDiff){
             minSumSqDiff = sumSqDiff;
+            
             disp = (unsigned char)k;
         }
 
