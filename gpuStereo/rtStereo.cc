@@ -198,7 +198,7 @@ for(int row = 0; row < rows; row++){
 
     //Smoothing depth image
     Mat medianDepth, filteredDepth, medianObstacles, filteredObstacles;
-    medianBlur(depthImage, medianDepth, 15);
+    medianBlur(depthImage, medianDepth, 5);
     GaussianBlur(medianDepth, filteredDepth, Size(5,5), 0);
 
     // Compute obstacles image using GPU
