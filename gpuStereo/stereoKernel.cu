@@ -17,7 +17,7 @@ int col1 = 364;
 
     const int windowWidth = 13; //must be odd
     const int halfWindow = (windowWidth-1)/2;
-    int disparityStep = 1
+    int disparityStep = 1;
     int windowStep = 1;
     double minDisparity = 0.0;
     double maxDisparity = 64.0;
